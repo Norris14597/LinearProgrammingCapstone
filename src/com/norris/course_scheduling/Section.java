@@ -40,4 +40,10 @@ public class Section {
         this.professorIdAssigned = professorIdAssigned;
     }
 
+    public String toString () {
+        String holder = "";
+        holder += Character.toString(this.sectionId) + this.professorIdAssigned;
+        return holder;
+    }
+
 }

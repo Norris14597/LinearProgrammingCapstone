@@ -42,4 +42,10 @@ public class Room {
     public String getRoomType() { return roomType; }
 
     public void setRoomType(String roomType) { this.roomType = roomType; }
+
+    public String toString () {
+        String holder = "";
+        holder += this.roomNum + " " + this.building + " " + this.seatingCapacity + " " + this.roomType;
+        return holder;
+    }
 }

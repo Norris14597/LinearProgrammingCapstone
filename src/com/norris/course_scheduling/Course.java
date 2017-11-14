@@ -46,4 +46,9 @@ public class Course {
         this.courseSections = courseSections;
     }
 
+    public String toString () {
+        String holder = "";
+        holder += this.courseId + " " + this.courseSize + " " + this.credits + " " + this.courseSections.toString();
+        return holder;
+    }
 }
