@@ -15,6 +15,10 @@ public class Room {
         this.roomType = roomType;
     }
 
+    public Room() {
+
+    }
+
     public String getRoomNum() {
         return roomNum;
     }
@@ -44,8 +48,7 @@ public class Room {
     public void setRoomType(String roomType) { this.roomType = roomType; }
 
     public String toString () {
-        String holder = "";
-        holder += this.roomNum + " " + this.building + " " + this.seatingCapacity + " " + this.roomType;
-        return holder;
+        return "ROOM******** Room Number: "+this.roomNum+" Building: "+this.building+" Seating: "+this.seatingCapacity
+                +" Room Type: "+ this.roomType;
     }
 }

@@ -41,9 +41,7 @@ public class Section {
     }
 
     public String toString () {
-        String holder = "";
-        holder += Character.toString(this.sectionId) + this.professorIdAssigned;
-        return holder;
+        return " Section ID: "+Character.toString(this.sectionId)+" Professor ID: "+this.professorIdAssigned;
     }
 
 }

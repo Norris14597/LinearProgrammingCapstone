@@ -18,7 +18,9 @@ public class CourseSchedulingMain {
 
         courseList = getCourseList();
         roomList = getRoomList();
-        System.out.println("r = " + roomList + "\nc = " + courseList);
+
+        courseList.forEach(System.out::println);
+        roomList.forEach(System.out::println);
 
     }
 

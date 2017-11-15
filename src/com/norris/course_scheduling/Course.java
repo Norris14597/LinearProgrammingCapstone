@@ -47,8 +47,7 @@ public class Course {
     }
 
     public String toString () {
-        String holder = "";
-        holder += this.courseId + " " + this.courseSize + " " + this.credits + " " + this.courseSections.toString();
-        return holder;
+        return "COURSE******** ID: "+this.courseId+" Size: "+this.courseSize+" Credits: "+this.credits+" Section: "+
+                this.courseSections.toString();
     }
 }
