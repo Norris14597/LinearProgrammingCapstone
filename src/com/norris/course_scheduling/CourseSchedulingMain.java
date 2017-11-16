@@ -17,9 +17,9 @@ public class CourseSchedulingMain {
     public static void main(String[] args) {
 
         courseList = getCourseList();
-        roomList = getRoomList();
-
         courseList.forEach(System.out::println);
+
+        roomList = getRoomList();
         roomList.forEach(System.out::println);
 
     }

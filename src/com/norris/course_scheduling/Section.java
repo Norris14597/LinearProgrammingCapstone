@@ -1,5 +1,6 @@
 package com.norris.course_scheduling;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Section {
@@ -8,20 +9,19 @@ public class Section {
 
     private List<Room> roomsAssigned;
 
-//    private double startTime;
-//    private double duration; //minutes
-
-    /*
-
-    private TimesHeld timesheld;
-
-    monday at 2:00pm for 1 hour in J100 and wednesday at 1:00pm for 1:30 hours in B200
-     */
+    private List<Day> dayList; //holds M-F from 8-5pm
 
 
     public Section(char id, int pid) {
         this.sectionId = id;
         this.professorIdAssigned = pid;
+
+        dayList = new ArrayList<Day>();
+        dayList.add(new Day("Monday"));
+        dayList.add(new Day("Tuesday"));
+        dayList.add(new Day("Wednesday"));
+        dayList.add(new Day("Thursday"));
+        dayList.add(new Day("Friday"));
     }
 
     public char getSectionId() {
