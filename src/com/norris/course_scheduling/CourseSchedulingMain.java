@@ -1,6 +1,9 @@
 package com.norris.course_scheduling;
 
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -17,7 +20,15 @@ public class CourseSchedulingMain {
 
     public static void main(String[] args) {
 
-        professorList = getProfessorist();
+        try {
+            PrintStream out = new PrintStream(new FileOutputStream("output.txt"));
+            System.setOut(out);
+        }
+        catch (FileNotFoundException e) {
+            System.out.println("output.txt invalid file");
+        }
+
+        professorList = getProfessorList();
         professorList.forEach(System.out::println);
         System.out.println();
 
@@ -25,10 +36,8 @@ public class CourseSchedulingMain {
         courseList.forEach(System.out::println);
         System.out.println();
 
-
         roomList = getRoomList();
         roomList.forEach(System.out::println);
-
     }
 
     private static List<Course> getCourseList() {
@@ -115,7 +124,7 @@ public class CourseSchedulingMain {
         return roomList;
     }
 
-    private static List<Professor> getProfessorist() {
+    private static List<Professor> getProfessorList() {
 
         List<Professor> professors = new ArrayList<>();
         Professor Corso = new Professor("Anthony Corso", new String[] {"Monday", "Wednesday", "Friday"});
@@ -123,7 +132,7 @@ public class CourseSchedulingMain {
         Professor Jones = new Professor("Creed Jones", new String[] {"Monday", "Wednesday", "Friday"});
         Professor Han = new Professor("Mi Kyung Han", new String[] {"Monday", "Wednesday", "Friday"});
         Professor Im = new Professor("Kyungsoo Im", new String[] {"Tuesday", "Thursday"});
-        Professor Kolta = new Professor(" Michael Kolta", new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"});
+        Professor Kolta = new Professor("Michael Kolta", new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"});
         Professor Perkins = new Professor("Arlene Louise Perkins", new String[] {"Tuesday", "Thursday"});
 
         professors.add(Corso);

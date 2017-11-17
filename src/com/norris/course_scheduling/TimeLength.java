@@ -21,6 +21,6 @@ public class TimeLength {
     }
 
     public String toString() {
-        return "starttime: "+startTimeHour+":"+startTimeMinute+" endtime: "+endTimeHour+":"+endTimeMinute+isTimeFilled;
+        return "\n\t\tstarttime: "+String.format("%02d",startTimeHour)+":"+String.format("%02d",startTimeMinute)+"   |   "+"endtime: "+String.format("%02d",endTimeHour)+":"+String.format("%02d",endTimeMinute)+"   |   "+isTimeFilled;
     }
 }

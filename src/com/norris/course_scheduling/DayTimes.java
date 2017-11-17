@@ -28,7 +28,7 @@ public class DayTimes {
     }
 
     public String toString() {
-        return "DAY: "+day+dayTimes.toString();
+        return "\n\tDAY: "+day+"\n\t"+dayTimes.toString();
     }
 
 }

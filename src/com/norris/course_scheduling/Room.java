@@ -60,6 +60,6 @@ public class Room {
 
     public String toString () {
         return "ROOM******** Number: "+this.roomNum+this.building+" Seating: "+this.seatingCapacity
-                +" Type: "+ this.roomType+" TIME: "+dayList.toString()+'\n';
+                +" Type: "+ this.roomType+" TIME: \n"+dayList.toString()+'\n';
     }
 }
