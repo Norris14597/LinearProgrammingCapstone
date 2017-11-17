@@ -10,7 +10,7 @@ public class Room {
     private String building;
     private int seatingCapacity;
     private String roomType;
-    private List<Day> dayList; //holds M-F from 8-5pm
+    private List<DayTimes> dayList; //holds M-F from 8-5pm
 
     public Room(String roomNum, String buildingNum, int seatingCapacity, String roomType) {
         this.roomNum = roomNum;
@@ -18,12 +18,12 @@ public class Room {
         this.seatingCapacity = seatingCapacity;
         this.roomType = roomType;
 
-        dayList = new ArrayList<Day>();
-        dayList.add(new Day("Monday"));
-        dayList.add(new Day("Tuesday"));
-        dayList.add(new Day("Wednesday"));
-        dayList.add(new Day("Thursday"));
-        dayList.add(new Day("Friday"));
+        dayList = new ArrayList<DayTimes>();
+        dayList.add(new DayTimes("Monday"));
+        dayList.add(new DayTimes("Tuesday"));
+        dayList.add(new DayTimes("Wednesday"));
+        dayList.add(new DayTimes("Thursday"));
+        dayList.add(new DayTimes("Friday"));
     }
 
     public Room() {
@@ -59,7 +59,7 @@ public class Room {
     public void setRoomType(String roomType) { this.roomType = roomType; }
 
     public String toString () {
-        return "ROOM******** Room Number: "+this.roomNum+" Building: "+this.building+" Seating: "+this.seatingCapacity
-                +" Room Type: "+ this.roomType+" TIME: "+dayList.toString()+'\n';
+        return "ROOM******** Number: "+this.roomNum+this.building+" Seating: "+this.seatingCapacity
+                +" Type: "+ this.roomType+" TIME: "+dayList.toString()+'\n';
     }
 }

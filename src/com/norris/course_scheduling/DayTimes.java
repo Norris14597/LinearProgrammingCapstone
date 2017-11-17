@@ -3,12 +3,12 @@ package com.norris.course_scheduling;
 
 import java.util.ArrayList;
 
-public class Day {
+public class DayTimes {
 
     private String day;
     private ArrayList<TimeLength> dayTimes;
 
-    public Day(String d) {
+    public DayTimes(String d) {
         this.day = d;
 
         dayTimes = new ArrayList<TimeLength>();

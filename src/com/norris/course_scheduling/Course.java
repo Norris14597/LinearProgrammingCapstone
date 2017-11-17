@@ -5,25 +5,26 @@ import java.util.List;
 
 public class Course {
 
-    private String courseId;
+    private String courseCode;
     private int courseSize;
     private int credits;
     private List<Section> courseSections;
 
 
     public Course(String id, int size, int credits, List<Section> sections){
-        this.courseId = id;
+        this.courseCode = id;
         this.courseSize = size;
         this.credits = credits;
+
         this.courseSections = sections;
     }
 
     public String getCourseId() {
-        return courseId;
+        return courseCode;
     }
 
     public void setCourseId(String courseId) {
-        this.courseId = courseId;
+        this.courseCode = courseId;
     }
 
     public int getCourseSize() {
@@ -47,7 +48,7 @@ public class Course {
     }
 
     public String toString () {
-        return "COURSE******** ID: "+this.courseId+" Size: "+this.courseSize+" Credits: "+this.credits+" Section: "+
+        return "COURSE******** Code: "+this.courseCode+" Size: "+this.courseSize+" Credits: "+this.credits+" "+
                 this.courseSections.toString();
     }
 }

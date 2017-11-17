@@ -9,15 +9,22 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class CourseSchedulingMain {
 
-    private String[] totalSchedule = new String[]{"M,T,W,R,F", "M", "T", "W", "R", "F", "M,W,F", "W,F", "T,R" };
+    //private String[] totalSchedule = new String[]{"M,T,W,R,F", "M", "T", "W", "R", "F", "M,W,F", "W,F", "T,R" };
 
     private static List<Course> courseList;
     private static List<Room> roomList;
+    private static List<Professor> professorList;
 
     public static void main(String[] args) {
 
+        professorList = getProfessorist();
+        professorList.forEach(System.out::println);
+        System.out.println();
+
         courseList = getCourseList();
         courseList.forEach(System.out::println);
+        System.out.println();
+
 
         roomList = getRoomList();
         roomList.forEach(System.out::println);
@@ -26,36 +33,50 @@ public class CourseSchedulingMain {
 
     private static List<Course> getCourseList() {
 
-        char[] sectionIds = {'A', 'B', 'C', 'D'};
-        //add sections A-D
-        List<Section> sectionList = new ArrayList<Section>();
-
         List<Course> courseList = new ArrayList<Course>();
-        for (int i = 0; i < 3; i++) {
-            sectionList.add(new Section(sectionIds[i], 0)); 
-        }
-        for (int i = 0; i < 5; i++) {
-            String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            String ints = "1234567890";
-            StringBuilder courseTitle = new StringBuilder();
-            Random rnd = new Random();
-            while (courseTitle.length() < 6) { // length of the random string.
+        char[] sectionIds = {'A', 'B', 'C', 'D'};
+        String[] courseName = {"EGR101", "EGR102", "EGR103", "EGR104", "EGR105"};
 
-                if (courseTitle.length() < 3) {
-                    int index = (int) (rnd.nextFloat() * chars.length());
-                    courseTitle.append(chars.charAt(index));
-                }
-                else {
-                    int index = (int) (rnd.nextFloat() * ints.length());
-                    courseTitle.append(ints.charAt(index));
-                }
-            }
+        //EGR101
+        List<Section> sectionList101 = new ArrayList<Section>();
+        sectionList101.add(new Section(sectionIds[0], courseName[0]+String.valueOf(sectionIds[0]), professorList.get(0)));
+        sectionList101.add(new Section(sectionIds[1], courseName[0]+String.valueOf(sectionIds[1]), professorList.get(1)));
+        sectionList101.add(new Section(sectionIds[2], courseName[0]+String.valueOf(sectionIds[2]), professorList.get(2)));
+        sectionList101.add(new Section(sectionIds[3], courseName[0]+String.valueOf(sectionIds[3]), professorList.get(3)));
+        courseList.add(new Course(courseName[0], 30, 3, sectionList101));
 
-            String courseCode = courseTitle.toString();
-            //course size
-            int randomCourseSize = ThreadLocalRandom.current().nextInt(10, 50 + 1);
-            courseList.add(new Course(courseCode, randomCourseSize, 3, sectionList));
-        }
+        //EGR102
+        List<Section> sectionList102 = new ArrayList<Section>();
+        sectionList102.add(new Section(sectionIds[0], courseName[1]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList102.add(new Section(sectionIds[1], courseName[1]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        sectionList102.add(new Section(sectionIds[2], courseName[1]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList102.add(new Section(sectionIds[3], courseName[1]+String.valueOf(sectionIds[3]), professorList.get(5)));
+        courseList.add(new Course(courseName[1], 50, 3, sectionList102));
+
+        //EGR103
+        List<Section> sectionList103 = new ArrayList<Section>();
+        sectionList103.add(new Section(sectionIds[0], courseName[2]+String.valueOf(sectionIds[0]), professorList.get(0)));
+        sectionList103.add(new Section(sectionIds[1], courseName[2]+String.valueOf(sectionIds[1]), professorList.get(1)));
+        sectionList103.add(new Section(sectionIds[2], courseName[2]+String.valueOf(sectionIds[2]), professorList.get(2)));
+        sectionList103.add(new Section(sectionIds[3], courseName[2]+String.valueOf(sectionIds[3]), professorList.get(3)));
+        courseList.add(new Course(courseName[2], 15, 3, sectionList103));
+
+        //EGR104
+        List<Section> sectionList104 = new ArrayList<Section>();
+        sectionList104.add(new Section(sectionIds[0], courseName[3]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList104.add(new Section(sectionIds[1], courseName[3]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        sectionList104.add(new Section(sectionIds[2], courseName[3]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList104.add(new Section(sectionIds[3], courseName[3]+String.valueOf(sectionIds[3]), professorList.get(5)));
+        courseList.add(new Course(courseName[2], 15, 3, sectionList104));
+
+        //EGR105
+        List<Section> sectionList105 = new ArrayList<Section>();
+        sectionList105.add(new Section(sectionIds[0], courseName[4]+String.valueOf(sectionIds[0]), professorList.get(0)));
+        sectionList105.add(new Section(sectionIds[1], courseName[4]+String.valueOf(sectionIds[1]), professorList.get(1)));
+        sectionList105.add(new Section(sectionIds[2], courseName[4]+String.valueOf(sectionIds[2]), professorList.get(2)));
+        sectionList105.add(new Section(sectionIds[3], courseName[4]+String.valueOf(sectionIds[3]), professorList.get(3)));
+        courseList.add(new Course(courseName[2], 15, 3, sectionList105));
+
         return courseList;
     }
 
@@ -91,5 +112,27 @@ public class CourseSchedulingMain {
         }
 
         return roomList;
+    }
+
+    private static List<Professor> getProfessorist() {
+
+        List<Professor> professors = new ArrayList<>();
+        Professor Corso = new Professor("Anthony Corso", new String[] {"Monday", "Wednesday", "Friday"});
+        Professor Clement = new Professor("Larry Clement", new String[] {"Monday", "Wednesday", "Friday"});
+        Professor Jones = new Professor("Creed Jones", new String[] {"Monday", "Wednesday", "Friday"});
+        Professor Han = new Professor("Mi Kyung Han", new String[] {"Monday", "Wednesday", "Friday"});
+        Professor Im = new Professor("Kyungsoo Im", new String[] {"Tuesday", "Thursday"});
+        Professor Kolta = new Professor(" Michael Kolta", new String[] {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday"});
+        Professor Perkins = new Professor("Arlene Louise Perkins", new String[] {"Tuesday", "Thursday"});
+
+        professors.add(Corso);
+        professors.add(Clement);
+        professors.add(Jones);
+        professors.add(Han);
+        professors.add(Im);
+        professors.add(Kolta);
+        professors.add(Perkins);
+
+        return professors;
     }
 }

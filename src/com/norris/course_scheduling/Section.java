@@ -4,44 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Section {
-    private char sectionId;
-    private int professorIdAssigned;
+    private char section;
+    private String sectionID;
+    private Professor professorAssigned;
 
-    private List<Room> roomsAssigned;
+    private int hours;
+    private Room roomAssigned; //one room per section
 
-    private List<Day> dayList; //holds M-F from 8-5pm
+    private List<SectionSlot> dayTimeAssigned; //holds value of time decision for each day
 
 
-    public Section(char id, int pid) {
-        this.sectionId = id;
-        this.professorIdAssigned = pid;
+    public Section(char id, String sec, Professor p) {
+        this.section = id;
+        this.sectionID = sec;
+        this.professorAssigned = p;
 
-        dayList = new ArrayList<Day>();
-        dayList.add(new Day("Monday"));
-        dayList.add(new Day("Tuesday"));
-        dayList.add(new Day("Wednesday"));
-        dayList.add(new Day("Thursday"));
-        dayList.add(new Day("Friday"));
+        dayTimeAssigned = new ArrayList<SectionSlot>();
+
     }
 
-    public char getSectionId() {
-        return this.sectionId;
+    public char getSection() {
+        return this.section;
     }
 
-    public void setSectionId(char id) {
-        this.sectionId = id;
+    public void setSection(char id) {
+        this.section = id;
     }
 
-    public int getProfessorIdAssigned() {
-        return professorIdAssigned;
+    public Professor getProfessorIdAssigned() {
+        return professorAssigned;
     }
 
-    public void setProfessorIdAssigned(int professorIdAssigned) {
-        this.professorIdAssigned = professorIdAssigned;
+    public void setProfessorIdAssigned(Professor professorAssigned) {
+        this.professorAssigned = professorAssigned;
     }
 
     public String toString () {
-        return " Section ID: "+Character.toString(this.sectionId)+" Professor ID: "+this.professorIdAssigned;
+        return "\n\t"+" SECTION: "+Character.toString(section)+" ID: "+sectionID+" Professor: "+professorAssigned.toString();
     }
 
 }
