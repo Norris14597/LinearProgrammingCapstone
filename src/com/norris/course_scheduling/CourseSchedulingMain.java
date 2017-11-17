@@ -36,6 +36,7 @@ public class CourseSchedulingMain {
         List<Course> courseList = new ArrayList<Course>();
         char[] sectionIds = {'A', 'B', 'C', 'D'};
         String[] courseName = {"EGR101", "EGR102", "EGR103", "EGR104", "EGR105"};
+        String[] courseTypes = {"computer", "lab", "projector", "basic"};
 
         //EGR101
         List<Section> sectionList101 = new ArrayList<Section>();
@@ -43,7 +44,7 @@ public class CourseSchedulingMain {
         sectionList101.add(new Section(sectionIds[1], courseName[0]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList101.add(new Section(sectionIds[2], courseName[0]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList101.add(new Section(sectionIds[3], courseName[0]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[0], 30, 3, sectionList101));
+        courseList.add(new Course(courseName[0], 30, 3, courseTypes[0], sectionList101));
 
         //EGR102
         List<Section> sectionList102 = new ArrayList<Section>();
@@ -51,7 +52,7 @@ public class CourseSchedulingMain {
         sectionList102.add(new Section(sectionIds[1], courseName[1]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList102.add(new Section(sectionIds[2], courseName[1]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList102.add(new Section(sectionIds[3], courseName[1]+String.valueOf(sectionIds[3]), professorList.get(5)));
-        courseList.add(new Course(courseName[1], 50, 3, sectionList102));
+        courseList.add(new Course(courseName[1], 50, 3, courseTypes[1], sectionList102));
 
         //EGR103
         List<Section> sectionList103 = new ArrayList<Section>();
@@ -59,7 +60,7 @@ public class CourseSchedulingMain {
         sectionList103.add(new Section(sectionIds[1], courseName[2]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList103.add(new Section(sectionIds[2], courseName[2]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList103.add(new Section(sectionIds[3], courseName[2]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[2], 15, 3, sectionList103));
+        courseList.add(new Course(courseName[2], 15, 3, courseTypes[2], sectionList103));
 
         //EGR104
         List<Section> sectionList104 = new ArrayList<Section>();
@@ -67,7 +68,7 @@ public class CourseSchedulingMain {
         sectionList104.add(new Section(sectionIds[1], courseName[3]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList104.add(new Section(sectionIds[2], courseName[3]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList104.add(new Section(sectionIds[3], courseName[3]+String.valueOf(sectionIds[3]), professorList.get(5)));
-        courseList.add(new Course(courseName[2], 15, 3, sectionList104));
+        courseList.add(new Course(courseName[2], 15, 3, courseTypes[3], sectionList104));
 
         //EGR105
         List<Section> sectionList105 = new ArrayList<Section>();
@@ -75,7 +76,7 @@ public class CourseSchedulingMain {
         sectionList105.add(new Section(sectionIds[1], courseName[4]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList105.add(new Section(sectionIds[2], courseName[4]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList105.add(new Section(sectionIds[3], courseName[4]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[2], 15, 3, sectionList105));
+        courseList.add(new Course(courseName[2], 15, 3, courseTypes[2], sectionList105));
 
         return courseList;
     }
@@ -86,7 +87,7 @@ public class CourseSchedulingMain {
 
         String buildings = "ABCDEFGHIJ";
         String roomNums = "1234567890";
-        String[] roomTypes = {"computer", "lab", "projector"};
+        String[] roomTypes = {"computer", "lab", "projector", "basic"};
 
         List<Room> roomList = new ArrayList<Room>();
 

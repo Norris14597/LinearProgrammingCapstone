@@ -8,13 +8,15 @@ public class Course {
     private String courseCode;
     private int courseSize;
     private int credits;
+    private String courseType;
     private List<Section> courseSections;
 
 
-    public Course(String id, int size, int credits, List<Section> sections){
+    public Course(String id, int size, int credits, String type, List<Section> sections){
         this.courseCode = id;
         this.courseSize = size;
         this.credits = credits;
+        this.courseType = type;
 
         this.courseSections = sections;
     }
