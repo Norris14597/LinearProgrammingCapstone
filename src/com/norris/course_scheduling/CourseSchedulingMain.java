@@ -20,6 +20,30 @@ public class CourseSchedulingMain {
 
     public static void main(String[] args) {
 
+        professorList = getProfessorList();
+        courseList = getCourseList();
+        roomList = getRoomList();
+
+        //TODO Make this more efficient
+        //This is allows us to set one time block's isTimeFilled value to true
+        roomList.get(3).fill("Monday",0,7);
+
+        //Suggestion on how to make it more efficient
+        //TODO Associate course with room based on type similarity
+        //TODO Use the M,T,W,H,F associated with professor to fill course section to room day
+        //Change the class times (# of time blocks used) based on day section occurs
+
+
+        //TODO Give happiness values to professors based on time of day
+        // i.e. For a professor that works T-H,  T 8-13 = 1.5, T 14-17 = 0, default = 1;
+        // means they want to work mornings on Tuesdays and dont care about time on Thursdays
+        //TODO Pair the course section with room day using time blocks (change both to true?)
+        //we will decide what time slots are taken by which course sections based on maximizing the happiness coefficient.
+        //change isTimeFilled blocks to true when course section is accepted
+        //TODO Hard constraint: at least 15 min break between classes
+
+        System.out.println();
+
         /*********Outputs*************/
         try {
             PrintStream out = new PrintStream(new FileOutputStream("output.txt"));
@@ -29,19 +53,17 @@ public class CourseSchedulingMain {
             System.out.println("output.txt invalid file");
         }
 
-        professorList = getProfessorList();
+
         professorList.forEach(System.out::println);
         System.out.println();
 
-        courseList = getCourseList();
+
         courseList.forEach(System.out::println);
         System.out.println();
 
-        roomList = getRoomList();
+
         roomList.forEach(System.out::println);
         /*****************************/
-
-        
     }
 
     private static List<Course> getCourseList() {

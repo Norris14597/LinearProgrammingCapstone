@@ -14,9 +14,14 @@ public class SectionSlot {
         classTimes = new ArrayList<TimeLength>();
     }
 
+    public void fillClass(String y, int x){
+        if (day.equals(y)) {
+            classTimes.get(x).setTrue(1);
+        }
+    }
+
     public String toString() {
         return "Class Time: "+day+classTimes.toString();
     }
-
 
 }

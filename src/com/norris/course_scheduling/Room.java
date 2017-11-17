@@ -58,6 +58,10 @@ public class Room {
 
     public void setRoomType(String roomType) { this.roomType = roomType; }
 
+    public void fill(String x, int y, int z){
+        dayList.get(y).fillDay(x,z);
+    }
+
     public String toString () {
         return "ROOM******** Number: "+this.roomNum+this.building+" Seating: "+this.seatingCapacity
                 +" Type: "+ this.roomType+" TIME: \n"+dayList.toString()+'\n';

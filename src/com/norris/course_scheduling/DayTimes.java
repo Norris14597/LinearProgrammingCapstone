@@ -11,7 +11,7 @@ public class DayTimes {
     public DayTimes(String d) {
         this.day = d;
 
-        dayTimes = new ArrayList<TimeLength>();
+        dayTimes = new ArrayList<>();
         for (int i = 8; i < 17; i++) {
             for (int j = 0; j <= 45; j+=15) {
                 if (j == 45) {
@@ -22,9 +22,12 @@ public class DayTimes {
                 }
             }
         }
+    }
 
-
-
+    public void fillDay(String y, int x){
+        if (day.equals(y)) {
+            dayTimes.get(x).setTrue(1);
+        }
     }
 
     public String toString() {
