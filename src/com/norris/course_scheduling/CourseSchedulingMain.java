@@ -30,7 +30,7 @@ public class CourseSchedulingMain {
 
         //Suggestion on how to make it more efficient
         //TODO Associate course with room based on type similarity
-        //TODO Use the M,T,W,H,F associated with professor to fill course section to room day
+        //TODO Use the M,T,W,R,F associated with professor to fill course section to room day
         //Change the class times (# of time blocks used) based on day section occurs
 
 
