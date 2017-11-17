@@ -20,6 +20,7 @@ public class CourseSchedulingMain {
 
     public static void main(String[] args) {
 
+        /*********Outputs*************/
         try {
             PrintStream out = new PrintStream(new FileOutputStream("output.txt"));
             System.setOut(out);
@@ -38,6 +39,9 @@ public class CourseSchedulingMain {
 
         roomList = getRoomList();
         roomList.forEach(System.out::println);
+        /*****************************/
+
+        
     }
 
     private static List<Course> getCourseList() {
@@ -77,7 +81,7 @@ public class CourseSchedulingMain {
         sectionList104.add(new Section(sectionIds[1], courseName[3]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList104.add(new Section(sectionIds[2], courseName[3]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList104.add(new Section(sectionIds[3], courseName[3]+String.valueOf(sectionIds[3]), professorList.get(5)));
-        courseList.add(new Course(courseName[2], 15, 3, courseTypes[3], sectionList104));
+        courseList.add(new Course(courseName[3], 15, 3, courseTypes[3], sectionList104));
 
         //EGR105
         List<Section> sectionList105 = new ArrayList<Section>();
@@ -85,7 +89,7 @@ public class CourseSchedulingMain {
         sectionList105.add(new Section(sectionIds[1], courseName[4]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList105.add(new Section(sectionIds[2], courseName[4]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList105.add(new Section(sectionIds[3], courseName[4]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[2], 15, 3, courseTypes[2], sectionList105));
+        courseList.add(new Course(courseName[4], 15, 3, courseTypes[2], sectionList105));
 
         return courseList;
     }

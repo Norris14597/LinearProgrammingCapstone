@@ -40,7 +40,7 @@ public class Section {
     }
 
     public String toString () {
-        return "\n\t"+" SECTION: "+Character.toString(section)+"   |   ID: "+sectionID+" Professor:   |   "+professorAssigned.toString();
+        return "\n\t"+" SECTION: "+Character.toString(section)+"   |   ID: "+sectionID+"   |   Professor: "+professorAssigned.toString();
     }
 
 }

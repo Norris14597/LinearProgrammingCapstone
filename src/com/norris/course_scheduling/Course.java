@@ -50,7 +50,7 @@ public class Course {
     }
 
     public String toString () {
-        return "COURSE******** Code: "+this.courseCode+" Size: "+this.courseSize+" Credits: "+this.credits+'\n'+
+        return "COURSE******** Code: "+this.courseCode+" Size: "+this.courseSize+" Type: "+this.courseType+" Credits: "+this.credits+" Section:\n"+
                 this.courseSections.toString()+'\n';
     }
 }
