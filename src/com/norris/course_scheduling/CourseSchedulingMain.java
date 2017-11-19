@@ -41,7 +41,7 @@ public class CourseSchedulingMain {
         //we will decide what time slots are taken by which course sections based on maximizing the happiness coefficient.
         //change isTimeFilled blocks to true when course section is accepted
         //TODO Hard constraint: at least 15 min break between classes
-        //make a last filled room time with section class so it can be deleted when reassigned
+        //make a last filled room time with section class so it can be deleted when reassigned .
 
         System.out.println();
 
