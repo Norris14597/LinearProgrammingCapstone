@@ -21,11 +21,11 @@ public class Course {
         this.courseSections = sections;
     }
 
-    public String getCourseId() {
+    public String getCourseCode() {
         return courseCode;
     }
 
-    public void setCourseId(String courseId) {
+    public void setCourseCode(String courseId) {
         this.courseCode = courseId;
     }
 
@@ -40,6 +40,14 @@ public class Course {
     public int getCredits() { return credits; }
 
     public void setCredits(int credits) { this.credits = credits; }
+
+    public String getCourseType() {
+        return courseType;
+    }
+
+    public void setCourseType(String courseType) {
+        this.courseType = courseType;
+    }
 
     public List<Section> getCourseSections() {
         return courseSections;

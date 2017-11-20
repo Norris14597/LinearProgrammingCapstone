@@ -58,6 +58,14 @@ public class Room {
 
     public void setRoomType(String roomType) { this.roomType = roomType; }
 
+    public List<DayTimes> getDayList() {
+        return dayList;
+    }
+
+    public void setDayList(List<DayTimes> dayList) {
+        this.dayList = dayList;
+    }
+
     public void fill(String x, int y, int z){
         dayList.get(y).fillDay(x,z);
     }

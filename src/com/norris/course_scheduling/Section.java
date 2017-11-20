@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Section {
-    private char section;
-    private String sectionID;
+    private char section; // section character
+    private String sectionID; //both course and section name
     private Professor professorAssigned;
 
     private int hours;
@@ -31,11 +31,11 @@ public class Section {
         this.section = id;
     }
 
-    public Professor getProfessorIdAssigned() {
+    public Professor getProfessorAssigned() {
         return professorAssigned;
     }
 
-    public void setProfessorIdAssigned(Professor professorAssigned) {
+    public void setProfessorAssigned(Professor professorAssigned) {
         this.professorAssigned = professorAssigned;
     }
 

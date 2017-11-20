@@ -30,6 +30,23 @@ public class DayTimes {
         }
     }
 
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
+    }
+
+    public ArrayList<TimeLength> getDayTimes() {
+        return dayTimes;
+    }
+
+    public void setDayTimes(ArrayList<TimeLength> dayTimes) {
+        this.dayTimes = dayTimes;
+    }
+
     public String toString() {
         return "\n\tDAY: "+day+"\n\t"+dayTimes.toString();
     }

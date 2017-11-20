@@ -27,6 +27,46 @@ public class TimeLength {
             isTimeFilled = false;
     }
 
+    public int getStartTimeHour() {
+        return startTimeHour;
+    }
+
+    public void setStartTimeHour(int startTimeHour) {
+        this.startTimeHour = startTimeHour;
+    }
+
+    public int getStartTimeMinute() {
+        return startTimeMinute;
+    }
+
+    public void setStartTimeMinute(int startTimeMinute) {
+        this.startTimeMinute = startTimeMinute;
+    }
+
+    public int getEndTimeHour() {
+        return endTimeHour;
+    }
+
+    public void setEndTimeHour(int endTimeHour) {
+        this.endTimeHour = endTimeHour;
+    }
+
+    public int getEndTimeMinute() {
+        return endTimeMinute;
+    }
+
+    public void setEndTimeMinute(int endTimeMinute) {
+        this.endTimeMinute = endTimeMinute;
+    }
+
+    public boolean isTimeFilled() {
+        return isTimeFilled;
+    }
+
+    public void setTimeFilled(boolean timeFilled) {
+        isTimeFilled = timeFilled;
+    }
+
     public String toString() {
         return "\n\t\tstarttime: "+String.format("%02d",startTimeHour)+":"+String.format("%02d",startTimeMinute)+"   |   "+"endtime: "+String.format("%02d",endTimeHour)+":"+String.format("%02d",endTimeMinute)+"   |   "+isTimeFilled;
     }

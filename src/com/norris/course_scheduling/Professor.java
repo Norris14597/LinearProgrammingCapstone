@@ -15,17 +15,44 @@ public class Professor {
 //    Arlene Louise Perkins
 
     private String professorName;
-    private List<DayTimes> availableTimes;
+    private String[] availableDaysNames;
+    private List<DayTimes> availableDayTimes;
     //private List<Section> sectionsTaught;
 
     public Professor(String n, String[] days) {
         this.professorName = n;
-        this.availableTimes = new ArrayList<>();
+        this.availableDaysNames = days;
+        this.availableDayTimes = new ArrayList<>();
         for (int i = 0; i < days.length; i++) {
-            this.availableTimes.add(new DayTimes(days[i]));
+            this.availableDayTimes.add(new DayTimes(days[i]));
         }
 
         //sectionsTaught = s;
+    }
+
+    public String getProfessorName() {
+        return professorName;
+    }
+
+    public void setProfessorName(String professorName) {
+        this.professorName = professorName;
+    }
+
+
+    public String[] getAvailableDaysNames() {
+        return availableDaysNames;
+    }
+
+    public void setAvailableDaysNames(String[] availableDaysNames) {
+        this.availableDaysNames = availableDaysNames;
+    }
+
+    public List<DayTimes> getAvailableDayTimes() {
+        return availableDayTimes;
+    }
+
+    public void setAvailableDayTimes(List<DayTimes> availableDayTimes) {
+        this.availableDayTimes = availableDayTimes;
     }
 
     public String toString() {
