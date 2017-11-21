@@ -4,7 +4,6 @@ package com.norris.course_scheduling;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,7 +25,7 @@ public class CourseSchedulingMain {
 
         //TODO Make this more efficient
         //This is allows us to set one time block's isTimeFilled value to true
-        roomList.get(3).fill("Monday", 0, 7);
+        //roomList.get(3).fill("Monday", 0, 7);
 
         //Suggestion on how to make it more efficient
         //TODO Associate course with room based on type similarity
@@ -55,201 +54,113 @@ public class CourseSchedulingMain {
         }
 
 
-        professorList.forEach(System.out::println);
+        //professorList.forEach(System.out::println);
+        //System.out.println();
+
+
+        //courseList.forEach(System.out::println);
         System.out.println();
 
 
-        courseList.forEach(System.out::println);
-        System.out.println();
-
-
-        roomList.forEach(System.out::println);
+        //roomList.forEach(System.out::println);
         /*****************************/
 
-        //each course in course list
-        for (Course c : courseList) {
-            //course info
-            int coursePop = c.getCourseSize();
-            int timeSlotsNeeded = c.getCredits() * 4; // total credits * 4 = total 15 minutes slots
-            String courseType = c.getCourseType();
-            double bestSectionSum = 0; //best fit for room to section
+        double totalSum = 0.0; //maximize objective value
 
+        double totalCourseSum = 0.0; //sum of each section within a course
+        //each course in course list
+        for (Course c : courseList) { //five times
+            double bestSectionSum = 0.0; //best fit for room to section
             //each section within a course
-            for (Section s : c.getCourseSections()) {
-                double sectionSum = 0; //individual sum
+
+            double sectionSum = 0; //individual sum of each section
+            for (Section s : c.getCourseSections()) { //five * 4 = 20 times
+
                 double Hij = 0; //happiness of courseType to roomType: 1.5 happy, 1 no preference, 0 not happy
-                int xij = 0; // 1 if section assigned to room, 0 otherwise
-                double courseToRoomSeating = 0; //course population to room seating ratio
+                //int xij = 0; // 1 if section assigned to room, 0 otherwise
                 Professor p = s.getProfessorAssigned(); //professor teaching the section
 
-                //MWF schedule for professor
-                if (p.getAvailableDayTimes().get(0).getDay() == "Monday") {
+                int lastSavedDayIndex = 0; //saves last starting day that meets all requirements
+                int lastSavedTimeIndex = 0; //saves last starting time that meets all requirements
+                boolean timeSaved = false;
 
-                    int timeIndex = 0; //start at 8:00AM
+                //MWF schedule for professor 5 professors right now
+                String[] sectionNames = p.getAvailableDaysNames();
+                if (sectionNames[0] == "Monday") {
+
                     int dayIndex = 0; //start on monday
 
-                    // 8:00 AM to 5:00 PM for professor availability on each day
-                    for (TimeLength professorTime : p.getAvailableDayTimes().get(dayIndex).getDayTimes()) {
+                    // all days available for professor
+                    for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
+                        DayTimes d = p.getAvailableDayTimes().get(i); //individual day
+                        //all times in each day
+                        for (int timeIndex = 0; timeIndex < d.getDayTimes().size(); timeIndex++) {
 
-                        // hour available; at least an hour before end of day; 3 days available at the same time for professor
-                        if (timeIndex + 4 <= 36 && timeSlotsNeeded == 12 &&
-                                new CourseSchedulingMain().isProfessorTimeAvailable(timeIndex, p.getAvailableDayTimes())) {
+                            // hour available; at least an hour before end of day; 3 days available at the same time for professor
+                            if (timeIndex + 4 <= 36 && c.getCredits() * 4 == 12 &&
+                                    LinearProgramming.isProfessorTimeAvailable(timeIndex, p.getAvailableDayTimes())) {
 
-                            //go through each room then view time if a good fit
-                            for (Room r : roomList) {
+                                //go through each room then view time if a good fit
+                                for (Room r : roomList) {
 
-                                boolean isRoomAvailable = new CourseSchedulingMain().isRoomTimeAvailable(timeIndex, r.getDayList(), "MWF");
-                                Hij = new CourseSchedulingMain().happinessRoomVal(r, c);
+                                    boolean isRoomAvailable = LinearProgramming.isRoomTimeAvailable(timeIndex, r.getDayList(), "MWF");
+                                    Hij = LinearProgramming.happinessRoomVal(r, c);
 
-                                sectionSum = c.getCourseSize()/r.getSeatingCapacity()*Hij;
+                                    sectionSum = (c.getCourseSize() / r.getSeatingCapacity()) * Hij;
+                                    if (sectionSum >= 1)
+                                        System.out.println("course size: "+c.getCourseSize()+"room size: "+r.getSeatingCapacity()+" SECTION SUM: "+sectionSum +" happiness: "+Hij+" r type: "+r.getRoomType() +" c type: "+c.getCourseType());
 
-                                if (isRoomAvailable && Hij >= 1 && sectionSum > bestSectionSum) {
+                                    if (isRoomAvailable && Hij >= 1 && sectionSum > bestSectionSum) {
+                                        bestSectionSum = sectionSum;
+                                        System.out.println("NEW BEST SUM: "+bestSectionSum);
+                                        //System.out.println(r.getBuilding()+r.getRoomNum()+": "+c.getCourseCode()+": "+Hij);
 
-                                    new CourseSchedulingMain().assignSectionToRoom(); //unnassign previous set section
-                                    new CourseSchedulingMain().assignSectionToRoom();
+                                        //unassign if previously assigned any time slots
+                                        //will always be true if better sum previously
+                                        if (timeSaved)
+                                            LinearProgramming.assignSectionToRoom(s, r, lastSavedDayIndex, lastSavedTimeIndex, "MWF", false);
+
+                                        lastSavedDayIndex = dayIndex;
+                                        lastSavedTimeIndex = timeIndex;
+                                        timeSaved = true;
+                                        bestSectionSum = sectionSum;
+                                        LinearProgramming.assignSectionToRoom(s, r, lastSavedDayIndex, lastSavedTimeIndex, "MWF", true);
+                                    }
                                 }
-
                             }
 
-
-                            //find if same times available in room
+                            //System.out.println(dayIndex+":"+timeIndex);
                         }
-                        //increment time and days 36 15 minute timelengths in each day
-                        timeIndex++;
-                        if (timeIndex == 36) {
-                            dayIndex++;
-                            timeIndex = 0;
-                        }
+                        dayIndex++;
                     }
                 }
                 //TR schedule for professor
                 else if (p.getAvailableDayTimes().get(0).getDay() == "Tuesday") {
 
                 }
+                totalCourseSum += bestSectionSum;
+                System.out.println(totalCourseSum);
             }
+
+            totalSum += totalCourseSum;
+            System.out.println(totalSum);
+
         }
+//        professorList.forEach(System.out::println);
+//        System.out.println();
+//        courseList.forEach(System.out::println);
+        System.out.println();
+        roomList.forEach(System.out::println);
     }
 
-    //courseToRoomSeating = coursePop / r.getSeatingCapacity();
-    //r.getDayList().get(roomDayIndex).getDayTimes().get(timeIndex);
-    // courseToRoomSeating = coursePop / r.getSeatingCapacity();
-//    int roomDayIndex = 0;
-//                                switch (p.getAvailableDayTimes().get(dayIndex).getDay()) {
-//        case "Monday":
-//            roomDayIndex = 0;
-//            break;
-//        case "Tuesday":
-//            roomDayIndex = 1;
-//            break;
-//        case "Wednesday":
-//            roomDayIndex = 2;
-//            break;
-//        case "Thursday":
-//            roomDayIndex = 3;
-//            break;
-//        case "Friday":
-//            roomDayIndex = 4;
-//            break;
-//        default:
-//            roomDayIndex = 0;
-//    }
 
-
-
-    //int roomTimeIndex = (sTimeHour - 8) * 4 + sTimeMinute / 15; //time index within day for rooms
-    private void assignSectionToRoom() {
-
-    }
-    private double happinessRoomVal(Room r, Course c) {
-        //section fits roomsize and is proper room type
-        if (r.getSeatingCapacity() >= c.getCourseSize() && r.getRoomType() == c.getCourseType()
-                && c.getCourseType() != "standard") {
-            return 1.5; //happy with room and section type
-        }
-        else if (r.getSeatingCapacity() >= c.getCourseSize() && c.getCourseType() == "standard") {
-            return 1; //no preference for room type
-        }
-        else {
-           return 0; //room did not fit section type
-        }
-    }
-
-    private boolean isProfessorTimeAvailable(int timeIndex, List<DayTimes> days) {
-
-        switch (days.get(0).getDay()) {
-            case "Monday":
-                return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                        && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled());
-            case "Tuesday":
-                return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 5).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled());
-            default:
-                return false;
-        }
-
-    }
-
-    private boolean isRoomTimeAvailable(int timeIndex, List<DayTimes> days, String type) {
-
-        switch (type) {
-            case "MWF":
-                return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                        && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                        && !days.get(4).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(4).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(4).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(4).getDayTimes().get(timeIndex + 3).isTimeFilled());
-            case "TR":
-                return (!days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                        && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled()
-                        && !days.get(3).getDayTimes().get(timeIndex).isTimeFilled()
-                        && !days.get(3).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                        && !days.get(3).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                        && !days.get(3).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                        && !days.get(3).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                        && !days.get(3).getDayTimes().get(timeIndex + 5).isTimeFilled());
-            default:
-                return false;
-        }
-
-    }
 
     private static List<Course> getCourseList() {
 
         List<Course> courseList = new ArrayList<Course>();
         char[] sectionIds = {'A', 'B', 'C', 'D'};
         String[] courseName = {"EGR101", "EGR102", "EGR103", "EGR104", "EGR105"};
-        String[] courseTypes = {"computer", "lab", "projector", "basic"};
+        String[] courseTypes = {"computer", "lab", "projector", "standard"};
 
         //EGR101
         List<Section> sectionList101 = new ArrayList<Section>();
@@ -281,7 +192,7 @@ public class CourseSchedulingMain {
         sectionList104.add(new Section(sectionIds[1], courseName[3]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList104.add(new Section(sectionIds[2], courseName[3]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList104.add(new Section(sectionIds[3], courseName[3]+String.valueOf(sectionIds[3]), professorList.get(5)));
-        courseList.add(new Course(courseName[3], 15, 3, courseTypes[3], sectionList104));
+        courseList.add(new Course(courseName[3], 20, 3, courseTypes[3], sectionList104));
 
         //EGR105
         List<Section> sectionList105 = new ArrayList<Section>();
@@ -289,7 +200,7 @@ public class CourseSchedulingMain {
         sectionList105.add(new Section(sectionIds[1], courseName[4]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList105.add(new Section(sectionIds[2], courseName[4]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList105.add(new Section(sectionIds[3], courseName[4]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[4], 15, 3, courseTypes[2], sectionList105));
+        courseList.add(new Course(courseName[4], 40, 3, courseTypes[2], sectionList105));
 
         return courseList;
     }
@@ -300,10 +211,11 @@ public class CourseSchedulingMain {
 
         String buildings = "ABCDEFGHIJ";
         String roomNums = "1234567890";
-        String[] roomTypes = {"computer", "lab", "projector", "basic"};
+        String[] roomTypes = {"computer", "lab", "projector", "standard"};
 
         List<Room> roomList = new ArrayList<Room>();
 
+        int roomSize = 10;
         for (int i = 0; i < 5; i++) {
             StringBuilder roomNumBuilder = new StringBuilder();
             Random rnd = new Random();
@@ -318,11 +230,11 @@ public class CourseSchedulingMain {
             }
             String roomNum = roomNumBuilder.toString();
             //room type
-            String roomType = roomTypes[ThreadLocalRandom.current().nextInt(0, 2 + 1)];
+            String roomType = roomTypes[ThreadLocalRandom.current().nextInt(0, 3 + 1)];
 
             //course size
-            int randomRoomSize = ThreadLocalRandom.current().nextInt(10, 50 + 1);
-            roomList.add(new Room(roomNum, building, randomRoomSize, roomType));
+            roomSize += 10;
+            roomList.add(new Room(roomNum, building, roomSize, roomType));
         }
 
         return roomList;
