@@ -49,9 +49,10 @@ public class LinearProgramming {
                 }
                 break;
             case "TR":
-                k = 1;
+                k = 0;
                 for (int i = 0; i < 2; i++) {
                     for (int j = 0; j < 6; j++) {
+                        //I think this overflows if it tries to assign 2 TR classes at once
                         r.getDayList().get(day+k).getDayTimes().get(time+j).setTimeFilled(f);
                         s.getDayTimeAssigned().get(day+k).getDayTimes().get(time+j).setTimeFilled(f);
                     }
