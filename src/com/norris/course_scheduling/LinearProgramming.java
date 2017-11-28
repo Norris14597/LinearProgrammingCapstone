@@ -51,173 +51,348 @@ public class LinearProgramming {
         }
     }
 
-    //checks if all time slots are available for faculty and rooms
-    public static boolean isTimesAvailable(int timeIndex, List<DayTimes> days, int credits, boolean isRoom, String day) {
+    //checks if all time slots are available for faculty
+    public static boolean isProfessorTimesAvailable(int timeIndex, List<DayTimes> days, int credits) {
 
         //size of days 1 / 1 credit = check 1 hour with surrounding minutes for single day
         //size of days 3 / 3 credits = check 1 hour with surrounding minutes for all three days
         //size of days 2 / 3 credits = check 1.5 hour with  surrounding minutes for both days
 
-        //return available for faculty
-        if (!isRoom) {
-            if (days.size() == 1 && credits == 1) {
-                //first time isn't start of day
-                if (timeIndex > 0 && timeIndex + 4 < 36) { // not beginning and not end: take 6 slots
-                    return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled());
-                }
-                else if (timeIndex == 0) { //beginning of day take 5 slots
-                    return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled());
-                }
-                else if (timeIndex + 4 == 36) { //end of day check five slots
-                    return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled());
-                }
-                else { //33, 34, 35
-                    //there's not an hour left in the day so no class can be started here
-                    return false;
-                }
+        //one credit on any day
+        if (days.size() == 1 && credits == 1) {
+            //first time isn't start of day
+            if (timeIndex > 0 && timeIndex + 4 < 36) { // not beginning and not end: take 6 slots
+                return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled());
             }
-            else if (days.size() == 3 && credits == 3) {
-                //first time isn't start of day
-                if (timeIndex > 0 && timeIndex + 4 < 36) {
-                    return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 4).isTimeFilled());
-                }
-                else if (timeIndex == 0) {
-                    return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 4).isTimeFilled());
-                }
-                else if (timeIndex + 4 == 36) {
-                    return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled());
-                }
-                else {
-                    //there's not an hour left in the day so no class can be started here
-                    return false;
-                }
-
+            else if (timeIndex == 0) { //beginning of day take 5 slots
+                return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled());
             }
-            else if (days.size() == 2 && credits == 3) {
-                //first time isn't start of day
-                if (timeIndex > 0 && timeIndex + 6 < 36) {
-                    return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 5).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 6).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 6).isTimeFilled());
-                }
-                else if (timeIndex == 0) {
-                    return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 5).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 6).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 6).isTimeFilled());
-                }
-                else if (timeIndex + 6 == 36) {
-                    return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(0).getDayTimes().get(timeIndex + 5).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
-                            && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled());
-                }
-                else {
-                    //there's not 1.5 hours left in the day so no class can be started here
-                    return false;
-                }
-
+            else if (timeIndex + 4 == 36) { //end of day check five slots
+                return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled());
             }
-            else
+            else { //33, 34, 35
+                //there's not an hour left in the day so no class can be started here
                 return false;
+            }
         }
-        else if (isRoom){
+        else if (days.size() == 3 && credits == 3) {
+            //first time isn't start of day
+            if (timeIndex > 0 && timeIndex + 4 < 36) {
+                return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 4).isTimeFilled());
+            }
+            else if (timeIndex == 0) {
+                return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 4).isTimeFilled());
+            }
+            else if (timeIndex + 4 == 36) {
+                return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled());
+            }
+            else {
+                //there's not an hour left in the day so no class can be started here
+                return false;
+            }
+
+        }
+        else if (days.size() == 2 && credits == 3) {
+            //first time isn't start of day
+            if (timeIndex > 0 && timeIndex + 6 < 36) {
+                return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 6).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 6).isTimeFilled());
+            }
+            else if (timeIndex == 0) {
+                return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 6).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 6).isTimeFilled());
+            }
+            else if (timeIndex + 6 == 36) {
+                return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled());
+            }
+            else {
+                //there's not 1.5 hours left in the day so no class can be started here
+                return false;
+            }
+
+        }
+        else
             return false;
+
+    }
+
+    public static boolean isRoomTimesAvailable(int timeIndex, List<DayTimes> days, int credits, String day) {
+
+        int index = 0;
+        switch (day) {
+            case "Monday":
+                index = 0;
+                break;
+            case "Tuesday":
+                index = 1;
+                break;
+            case "Wednesday":
+                index = 2;
+                break;
+            case "Thursday":
+                index = 3;
+                break;
+            case "Friday":
+                index = 4;
+                break;
+            default:
+                index = 0;
         }
-        else {
-            return false; // will never get here
+
+
+
+        //one credit on any day
+        //size of days 5 / 1 credit = check 1 hour with day and time index for single day
+        if (credits == 1) {
+            //first time isn't start of day
+            if (timeIndex > 0 && timeIndex + 4 < 36) { // not beginning and not end: take 6 slots
+                return (!days.get(index).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 4).isTimeFilled());
+            }
+            else if (timeIndex == 0) { //beginning of day take 5 slots
+                return (!days.get(index).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 4).isTimeFilled());
+            }
+            else if (timeIndex + 4 == 36) { //end of day check five slots
+                return (!days.get(index).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(index).getDayTimes().get(timeIndex + 3).isTimeFilled());
+            }
+            else { //33, 34, 35
+                //there's not an hour left in the day so no class can be started here
+                return false;
+            }
         }
+        else if (credits == 3 && day == "Monday") {
+            //          if monday check 3 days MWF with 0, 2, 4 day indexes for one hour
+            //first time isn't start of day
+            if (timeIndex > 0 && timeIndex + 4 < 36) {
+                return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 4).isTimeFilled());
+            }
+            else if (timeIndex == 0) {
+                return (!days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 4).isTimeFilled());
+            }
+            else if (timeIndex + 4 == 36) {
+                return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(4).getDayTimes().get(timeIndex + 3).isTimeFilled());
+            }
+            else {
+                //there's not an hour left in the day so no class can be started here
+                return false;
+            }
+
+        }
+        else if (credits == 3 && day == "Tuesday") {
+            //          if tuesday check 2 days TR with 1, 3 day indexes for 1.5 hours
+            //first time isn't start of day
+            if (timeIndex > 0 && timeIndex + 6 < 36) {
+                return (!days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 6).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 6).isTimeFilled());
+            }
+            else if (timeIndex == 1) {
+                return (!days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 6).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 6).isTimeFilled());
+            }
+            else if (timeIndex + 6 == 36) {
+                return (!days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex - 1).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 1).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 2).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 3).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 4).isTimeFilled()
+                        && !days.get(3).getDayTimes().get(timeIndex + 5).isTimeFilled());
+            }
+            else {
+                //there's not 1.5 hours left in the day so no class can be started here
+                return false;
+            }
+
+        }
+        else
+            return false;
 
     }
 

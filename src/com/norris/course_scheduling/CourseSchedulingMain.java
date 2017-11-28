@@ -168,9 +168,9 @@ public class CourseSchedulingMain {
                                     System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
 
                                     //check if professor and room are both available during this time
-                                    boolean isHourAvailableForProfessor = LinearProgramming.isTimesAvailable(j, professorDays, c.getCredits(), false, d.getDay());
-                                    boolean isHourAvailableForRoom = LinearProgramming.isTimesAvailable(j, roomDays, c.getCredits(), true, d.getDay());
-                                    System.out.println("HOURS AVAILABLE: "+ j+" PROFESSOR OK TO TEACH: "+isHourAvailableForProfessor+"ROOM: "+isHourAvailableForRoom);
+                                    boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
+                                    boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), d.getDay());
+                                    System.out.println("HOURS AVAILABLE: "+ j+" PROFESSOR OK TO TEACH: "+isHourAvailableForProfessor+"ROOM OK TO BE FILLED: "+isHourAvailableForRoom);
                                     System.out.println();
                                     System.out.println();
 
