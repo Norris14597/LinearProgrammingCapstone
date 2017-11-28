@@ -17,7 +17,7 @@ public class Professor {
     private String professorName;
     private String[] availableDaysNames;
     private List<DayTimes> availableDayTimes;
-    //private List<Section> sectionsTaught;
+    private List<Section> sectionsTaught;
 
     public Professor(String n, String[] days) {
         this.professorName = n;
@@ -27,7 +27,7 @@ public class Professor {
             this.availableDayTimes.add(new DayTimes(days[i]));
         }
 
-        //sectionsTaught = s;
+        sectionsTaught = new ArrayList<Section>();
     }
 
     public String getProfessorName() {
@@ -53,6 +53,14 @@ public class Professor {
 
     public void setAvailableDayTimes(List<DayTimes> availableDayTimes) {
         this.availableDayTimes = availableDayTimes;
+    }
+
+    public List<Section> getSectionsTaught() {
+        return sectionsTaught;
+    }
+
+    public void setSectionsTaught(List<Section> sectionsTaught) {
+        this.sectionsTaught = sectionsTaught;
     }
 
     public String toString() {

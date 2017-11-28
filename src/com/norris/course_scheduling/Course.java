@@ -6,13 +6,13 @@ import java.util.List;
 public class Course {
 
     private String courseCode;
-    private int courseSize;
+    private double courseSize;
     private int credits;
     private String courseType;
     private List<Section> courseSections;
 
 
-    public Course(String id, int size, int credits, String type, List<Section> sections){
+    public Course(String id, double size, int credits, String type, List<Section> sections){
         this.courseCode = id;
         this.courseSize = size;
         this.credits = credits;
@@ -29,11 +29,11 @@ public class Course {
         this.courseCode = courseId;
     }
 
-    public int getCourseSize() {
+    public double getCourseSize() {
         return courseSize;
     }
 
-    public void setCourseSize(int courseSize) {
+    public void setCourseSize(double courseSize) {
         this.courseSize = courseSize;
     }
 
