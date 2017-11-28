@@ -218,6 +218,7 @@ public class CourseSchedulingMain {
 //    //roomList.forEach(System.out::println);
 //}
 
+    //also, I left it random courses on my side.
     private static List<Course> getCourseList() {
 
         List<Course> courseList = new ArrayList<Course>();

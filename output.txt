@@ -37,8 +37,6 @@ NEW BEST SUM: 2.0
 Assigning EGR104 taught by Kyungsoo Im to classroom 239 TR
 
 
-Assigning EGR104 taught by Kyungsoo Im to classroom 239 TR
-
 course size: 20 room size: 50 SECTION SUM: 2.0 happiness: 1.0 r type: lab c type: standard
 course size: 20 room size: 50 SECTION SUM: 2.0 happiness: 1.0 r type: lab c type: standard
 course size: 20 room size: 50 SECTION SUM: 2.0 happiness: 1.0 r type: lab c type: standard
