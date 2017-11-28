@@ -113,42 +113,45 @@ public class CourseSchedulingMain {
                     System.out.println("HAPPINESS WAS CHANGED TO: "+Hij+" FOR "+r.getRoomType()+" "+c.getCourseType());
                     System.out.println("ROOM EFFICIENCY IS: COURSE"+c.getCourseSize() +"ROOM" +r.getSeatingCapacity());
                     System.out.println("ROOM EFFICIENCY IS: "+roomEfficiency+" FOR "+r.getRoomType()+" "+c.getCourseType());
+
+                    System.out.println("ROOOM DAYS "+roomDays.toString());
+
                     //okay type and enough seats: doesnt take into account availability yet
                     if (Hij >= 1) {
 
                         // 1 credit and MWF schedule
-                        if (c.getCredits() == 1 && professorScheduleType == "MWF") {
-                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
-
-                                //put professor into list for ease of passing to LP methods
-                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
-                                List<DayTimes> professorDays = new ArrayList<>();
-                                professorDays.add(d);
-
-                                System.out.println(p.getProfessorName()+" IS AVAILABLE DAYS "+d.getDay());
-
-                                //each "TimeLength" within a single a day: 15 minutes each for professor availability
-                                for (int j = 0; j < d.getDayTimes().size(); j++) {
-
-                                   //check if professor and room are both available during this time
-                                    boolean isHourAvailableForProfessor = LinearProgramming.isTimesAvailable(j, professorDays, c.getCredits());
-                                    boolean isHourAvailableForRoom = LinearProgramming.isTimesAvailable(j, roomDays, c.getCredits());
-                                    System.out.println("return okay");
-                                    //professor is available for one hour + 15 minutes before and after
-                                    if (isHourAvailableForProfessor && isHourAvailableForRoom) {
-                                        double sectionSum = Hij * roomEfficiency;
-                                        if (sectionSum > bestSectionSum) {
-                                            bestSectionSum = sectionSum;
-                                            bestMWF = LinearProgramming.clearAllTimeSlots(bestMWF);
-                                            bestMWF = LinearProgramming.assignTimeSlots(bestMWF, j, c.getCredits(), d.getDay());
-                                            bestRoom = r;
-                                            System.out.println("*********************"+"FIT HAS BEEN FOUND ******************");
-                                        }
-                                    }
-
-                                } //end times
-                            } //end days
-                        } //end 1 credit and MWF schedule
+//                        if (c.getCredits() == 1 && professorScheduleType == "MWF") {
+//                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
+//                                System.out.println("IN MWF WITH 1 CREDIT");
+//                                //put professor into list for ease of passing to LP methods
+//                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
+//                                List<DayTimes> professorDays = new ArrayList<>();
+//                                professorDays.add(d);
+//
+//                                System.out.println(p.getProfessorName()+" IS AVAILABLE DAYS "+d.getDay());
+//
+//                                //each "TimeLength" within a single a day: 15 minutes each for professor availability
+//                                for (int j = 0; j < d.getDayTimes().size(); j++) {
+//
+//                                   //check if professor and room are both available during this time
+//                                    boolean isHourAvailableForProfessor = LinearProgramming.isTimesAvailable(j, professorDays, c.getCredits());
+//                                    boolean isHourAvailableForRoom = LinearProgramming.isTimesAvailable(j, roomDays, c.getCredits());
+//                                    System.out.println("return okay");
+//                                    //professor is available for one hour + 15 minutes before and after
+//                                    if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+//                                        double sectionSum = Hij * roomEfficiency;
+//                                        if (sectionSum > bestSectionSum) {
+//                                            bestSectionSum = sectionSum;
+//                                            bestMWF = LinearProgramming.clearAllTimeSlots(bestMWF);
+//                                            bestMWF = LinearProgramming.assignTimeSlots(bestMWF, j, c.getCredits(), d.getDay());
+//                                            bestRoom = r;
+//                                            System.out.println("*********************"+"FIT HAS BEEN FOUND ******************");
+//                                        }
+//                                    }
+//
+//                                } //end times
+//                            } //end days
+//                        } //end 1 credit and MWF schedule
 
                         // 1 credit and TR schedule
                         if (c.getCredits() == 1 && professorScheduleType == "TR") {
@@ -159,15 +162,17 @@ public class CourseSchedulingMain {
                                 List<DayTimes> professorDays = new ArrayList<>();
                                 professorDays.add(d);
 
-                                //System.out.println(p.getProfessorName()+" IS AVAILABLE DAYS "+d.getDay());
-
                                 //each "TimeLength" within a single a day: 15 minutes each for professor availability
+                                System.out.println("DAY: ***************"+ d.getDay());
                                 for (int j = 0; j < d.getDayTimes().size(); j++) {
-                                    //System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
+                                    System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
 
                                     //check if professor and room are both available during this time
-                                    boolean isHourAvailableForProfessor = LinearProgramming.isTimesAvailable(j, professorDays, c.getCredits());
-                                    boolean isHourAvailableForRoom = LinearProgramming.isTimesAvailable(j, roomDays, c.getCredits());
+                                    boolean isHourAvailableForProfessor = LinearProgramming.isTimesAvailable(j, professorDays, c.getCredits(), false, d.getDay());
+                                    boolean isHourAvailableForRoom = LinearProgramming.isTimesAvailable(j, roomDays, c.getCredits(), true, d.getDay());
+                                    System.out.println("HOURS AVAILABLE: "+ j+" PROFESSOR OK TO TEACH: "+isHourAvailableForProfessor+"ROOM: "+isHourAvailableForRoom);
+                                    System.out.println();
+                                    System.out.println();
 
                                     //professor is available for one hour + 15 minutes before and after
                                     if (isHourAvailableForProfessor && isHourAvailableForRoom) {
@@ -185,74 +190,74 @@ public class CourseSchedulingMain {
                         } //end 1 credit and TR schedule
 
                         // 3 credits and MWF schedule
-                        if (c.getCredits() == 3 && professorScheduleType == "MWF") {
-
-                            //put professor into list for ease of passing to LP methods
-                            List<DayTimes> professorDays = new ArrayList<>();
-                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
-                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
-                                professorDays.add(d);
-                                //System.out.println(p.getProfessorName()+" IS AVAILABLE DAYS "+d.getDay());
-                            }
-
-                            //each "TimeLength" within a MONDAY: 15 minutes each for professor availability
-                            for (int j = 0; j < professorDays.get(0).getDayTimes().size(); j++) {
-                                //System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
-
-                                //check if professor and room are both available during this time
-                                boolean isHourAvailableForProfessor = LinearProgramming.isTimesAvailable(j, professorDays, c.getCredits());
-                                boolean isHourAvailableForRoom = LinearProgramming.isTimesAvailable(j, roomDays, c.getCredits());
-
-
-                                //professor is available for one hour + 15 minutes before and after
-                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
-                                    double sectionSum = Hij * roomEfficiency;
-                                    if (sectionSum > bestSectionSum) {
-                                        bestSectionSum = sectionSum;
-                                        bestMWF = LinearProgramming.clearAllTimeSlots(bestMWF);
-                                        bestMWF = LinearProgramming.assignTimeSlots(bestMWF, j, c.getCredits(), professorDays.get(0).getDay());
-                                        bestRoom = r;
-                                    }
-                                }
-
-                            } //end times in Monday
-                        } //end 3 credit and MWF schedule
+//                        if (c.getCredits() == 3 && professorScheduleType == "MWF") {
+//                            System.out.println("IN MWF WITH 3 CREDITS");
+//                            //put professor into list for ease of passing to LP methods
+//                            List<DayTimes> professorDays = new ArrayList<>();
+//                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
+//                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
+//                                professorDays.add(d);
+//                                System.out.println(p.getProfessorName()+" IS AVAILABLE DAYS "+d.getDay());
+//                            }
+//
+//                            //each "TimeLength" within a MONDAY: 15 minutes each for professor availability
+//                            for (int j = 0; j < professorDays.get(0).getDayTimes().size(); j++) {
+//                                //System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
+//
+//                                //check if professor and room are both available during this time
+//                                boolean isHourAvailableForProfessor = LinearProgramming.isTimesAvailable(j, professorDays, c.getCredits());
+//                                boolean isHourAvailableForRoom = LinearProgramming.isTimesAvailable(j, roomDays, c.getCredits());
+//
+//
+//                                //professor is available for one hour + 15 minutes before and after
+//                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+//                                    double sectionSum = Hij * roomEfficiency;
+//                                    if (sectionSum > bestSectionSum) {
+//                                        bestSectionSum = sectionSum;
+//                                        bestMWF = LinearProgramming.clearAllTimeSlots(bestMWF);
+//                                        bestMWF = LinearProgramming.assignTimeSlots(bestMWF, j, c.getCredits(), professorDays.get(0).getDay());
+//                                        bestRoom = r;
+//                                    }
+//                                }
+//
+//                            } //end times in Monday
+//                        } //end 3 credit and MWF schedule
 
 
                         // 3 credits and TR schedule
-                        if (c.getCredits() == 3 && professorScheduleType == "TR") {
-
-                            //put professor into list for ease of passing to LP methods
-                            List<DayTimes> professorDays = new ArrayList<>();
-                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
-                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
-                                professorDays.add(d);
-                                //System.out.println(p.getProfessorName()+" IS AVAILABLE DAYS "+d.getDay());
-                            }
-
-                            //each "TimeLength" within TUESDAY: 15 minutes each for professor availability
-                            for (int j = 0; j < professorDays.get(0).getDayTimes().size(); j++) {
-                                //System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
-
-                                //check if professor and room are both available during this time
-                                boolean isHourAvailableForProfessor = LinearProgramming.isTimesAvailable(j, professorDays, c.getCredits());
-                                boolean isHourAvailableForRoom = LinearProgramming.isTimesAvailable(j, roomDays, c.getCredits());
-
-                                System.out.println("return okay");
-
-                                //professor is available for one hour + 15 minutes before and after
-                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
-                                    double sectionSum = Hij * roomEfficiency;
-                                    if (sectionSum > bestSectionSum) {
-                                        bestSectionSum = sectionSum;
-                                        bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
-                                        bestMWF = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), professorDays.get(0).getDay());
-                                        bestRoom = r;
-                                    }
-                                }
-
-                            } //end times in tuesday
-                        } //end 3 credit and TR schedule
+//                        if (c.getCredits() == 3 && professorScheduleType == "TR") {
+//
+//                            //put professor into list for ease of passing to LP methods
+//                            List<DayTimes> professorDays = new ArrayList<>();
+//                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
+//                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
+//                                professorDays.add(d);
+//                                //System.out.println(p.getProfessorName()+" IS AVAILABLE DAYS "+d.getDay());
+//                            }
+//
+//                            //each "TimeLength" within TUESDAY: 15 minutes each for professor availability
+//                            for (int j = 0; j < professorDays.get(0).getDayTimes().size(); j++) {
+//                                //System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
+//
+//                                //check if professor and room are both available during this time
+//                                boolean isHourAvailableForProfessor = LinearProgramming.isTimesAvailable(j, professorDays, c.getCredits());
+//                                boolean isHourAvailableForRoom = LinearProgramming.isTimesAvailable(j, roomDays, c.getCredits());
+//
+//                                System.out.println("return okay");
+//
+//                                //professor is available for one hour + 15 minutes before and after
+//                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+//                                    double sectionSum = Hij * roomEfficiency;
+//                                    if (sectionSum > bestSectionSum) {
+//                                        bestSectionSum = sectionSum;
+//                                        bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
+//                                        bestMWF = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), professorDays.get(0).getDay());
+//                                        bestRoom = r;
+//                                    }
+//                                }
+//
+//                            } //end times in tuesday
+//                        } //end 3 credit and TR schedule
 
                     } //end if happy
 
@@ -314,7 +319,7 @@ public class CourseSchedulingMain {
 //        sectionList101.add(new Section(sectionIds[1], courseName[0]+String.valueOf(sectionIds[1]), professorList.get(1)));
 //        sectionList101.add(new Section(sectionIds[2], courseName[0]+String.valueOf(sectionIds[2]), professorList.get(2)));
 //        sectionList101.add(new Section(sectionIds[3], courseName[0]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[0], 32, 3, courseTypes[1], sectionList101));
+        courseList.add(new Course(courseName[0], 32, 1, courseTypes[1], sectionList101));
         //public Course(String id, int size, int credits, String type, List<Section> sections){
 /*
         //EGR102
@@ -406,17 +411,17 @@ public class CourseSchedulingMain {
         Professor Perkins = new Professor("Arlene Louise Perkins", new String[] {"Tuesday", "Thursday"});
 
         //for testing purposes only set first hour of professors day filled
-        Corso.getAvailableDayTimes().get(0).getDayTimes().get(0).setTimeFilled(true);
-        Corso.getAvailableDayTimes().get(0).getDayTimes().get(1).setTimeFilled(true);
-        Corso.getAvailableDayTimes().get(0).getDayTimes().get(2).setTimeFilled(true);
-        Corso.getAvailableDayTimes().get(0).getDayTimes().get(3).setTimeFilled(true);
+        Im.getAvailableDayTimes().get(0).getDayTimes().get(0).setTimeFilled(true);
+        Im.getAvailableDayTimes().get(0).getDayTimes().get(1).setTimeFilled(true);
+        Im.getAvailableDayTimes().get(0).getDayTimes().get(2).setTimeFilled(true);
+        Im.getAvailableDayTimes().get(0).getDayTimes().get(3).setTimeFilled(true);
 
-        professors.add(Corso);
+        //professors.add(Corso);
 
 //        professors.add(Clement);
 //        professors.add(Jones);
 //        professors.add(Han);
-//        professors.add(Im);
+        professors.add(Im);
 //        professors.add(Kolta);
 //        professors.add(Perkins);
 
