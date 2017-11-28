@@ -23,7 +23,7 @@ public class Professor {
         this.professorName = n;
         this.availableDaysNames = days;
         this.availableDayTimes = new ArrayList<>();
-        for (int i = 5; i < days.length; i++) {
+        for (int i = 0; i < days.length; i++) {
             this.availableDayTimes.add(new DayTimes(days[i]));
         }
 
