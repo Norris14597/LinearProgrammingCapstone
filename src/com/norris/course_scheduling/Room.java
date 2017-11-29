@@ -8,11 +8,11 @@ public class Room {
 
     private String roomNum;
     private String building;
-    private int seatingCapacity;
+    private double seatingCapacity;
     private String roomType;
     private List<DayTimes> dayList; //holds M-F from 8-5pm
 
-    public Room(String roomNum, String buildingNum, int seatingCapacity, String roomType) {
+    public Room(String roomNum, String buildingNum, double seatingCapacity, String roomType) {
         this.roomNum = roomNum;
         this.building = buildingNum;
         this.seatingCapacity = seatingCapacity;
@@ -46,11 +46,11 @@ public class Room {
         this.building = building;
     }
 
-    public int getSeatingCapacity() {
+    public double getSeatingCapacity() {
         return seatingCapacity;
     }
 
-    public void setSeatingCapacity(int seatingCapacity) {
+    public void setSeatingCapacity(double seatingCapacity) {
         this.seatingCapacity = seatingCapacity;
     }
 
