@@ -114,7 +114,7 @@ public class CourseSchedulingMain {
                     System.out.println("ROOM EFFICIENCY IS: COURSE"+c.getCourseSize() +"ROOM" +r.getSeatingCapacity());
                     System.out.println("ROOM EFFICIENCY IS: "+roomEfficiency+" FOR "+r.getRoomType()+" "+c.getCourseType());
 
-                    System.out.println("ROOOM DAYS "+roomDays.toString());
+                    //System.out.println("ROOOM DAYS "+roomDays.toString());
 
                     //okay type and enough seats: doesnt take into account availability yet
                     if (Hij >= 1) {
@@ -165,22 +165,31 @@ public class CourseSchedulingMain {
                                 //each "TimeLength" within a single a day: 15 minutes each for professor availability
                                 System.out.println("DAY: ***************"+ d.getDay());
                                 for (int j = 0; j < d.getDayTimes().size(); j++) {
-                                    System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
+                                    //System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
 
                                     //check if professor and room are both available during this time
                                     boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
                                     boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), d.getDay());
-                                    System.out.println("HOURS AVAILABLE: "+ j+" PROFESSOR OK TO TEACH: "+isHourAvailableForProfessor+"ROOM OK TO BE FILLED: "+isHourAvailableForRoom);
-                                    System.out.println();
-                                    System.out.println();
+                                    //System.out.println("HOURS AVAILABLE: "+ j+" PROFESSOR OK TO TEACH: "+isHourAvailableForProfessor+"ROOM OK TO BE FILLED: "+isHourAvailableForRoom);
 
                                     //professor is available for one hour + 15 minutes before and after
                                     if (isHourAvailableForProfessor && isHourAvailableForRoom) {
                                         double sectionSum = Hij * roomEfficiency;
                                         if (sectionSum > bestSectionSum) {
+                                            System.out.println("FOUND A MATCH!! LAST SUM"+bestSectionSum+" THIS SUM "+sectionSum);
                                             bestSectionSum = sectionSum;
                                             bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
+                                            System.out.println("TIMES HAVE BEEN CLEARED!!");
+                                            System.out.println(bestTR.toString());
+                                            System.out.println();
+                                            System.out.println();
+                                            System.out.println();
                                             bestTR = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), d.getDay());
+                                            System.out.println("TIMES HAVE BEEN ADDED!!");
+                                            System.out.println(bestTR.toString());
+                                            System.out.println();
+                                            System.out.println();
+                                            System.out.println();
                                             bestRoom = r;
                                         }
                                     }
@@ -367,10 +376,10 @@ public class CourseSchedulingMain {
 
         List<Room> roomList = new ArrayList<Room>();
 
-        Room a = new Room("100J", "EGR", 33, "lab");
-        Room b = new Room("215E", "EGR", 35, "computer");
+        Room a = new Room("100J", "EGR", 36, "lab");
+        Room b = new Room("215E", "EGR", 33, "lab");
         roomList.add(a);
-        //roomList.add(b);
+        roomList.add(b);
 
 //        int roomSize = 10;
 //        for (int i = 0; i < 5; i++) {
