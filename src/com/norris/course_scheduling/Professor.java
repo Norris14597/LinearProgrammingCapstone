@@ -63,6 +63,25 @@ public class Professor {
         this.sectionsTaught = sectionsTaught;
     }
 
+    public void addDayTimes(List<DayTimes> dayTimesToAdd) {
+        for (DayTimes d : availableDayTimes) {
+            for (TimeLength t: d.getDayTimes()) {
+
+                for (DayTimes dayToAdd: dayTimesToAdd) {
+                    for (TimeLength timeAdd: dayToAdd.getDayTimes()) {
+                        //same day and same time and time to add is filled set day time
+                        if (d.getDay() == dayToAdd.getDay() && t.getStartTimeHour() == timeAdd.getStartTimeHour()
+                                && t.getStartTimeMinute() == timeAdd.getStartTimeMinute() && timeAdd.isTimeFilled()) {
+                            t.setTimeFilled(true);
+                        }
+                    }
+                }
+
+
+            }
+        }
+    }
+
     public String toString() {
         return professorName;
     }
