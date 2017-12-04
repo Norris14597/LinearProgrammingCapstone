@@ -15,10 +15,10 @@ public class DayTimes {
         for (int i = 8; i < 17; i++) {
             for (int j = 0; j <= 45; j+=15) {
                 if (j == 45) {
-                    dayTimes.add(new TimeLength(i, j, i + 1, 0));
+                    dayTimes.add(new TimeLength("", i, j, i + 1, 0));
                 }
                 else {
-                    dayTimes.add(new TimeLength(i, j, i, j + 15));
+                    dayTimes.add(new TimeLength("", i, j, i, j + 15));
                 }
             }
         }

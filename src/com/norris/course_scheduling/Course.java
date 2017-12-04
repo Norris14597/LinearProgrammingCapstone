@@ -59,6 +59,6 @@ public class Course {
 
     public String toString () {
         return "COURSE******** Code: "+courseCode+" Size: "+courseSize+" Credits: "+credits+" "+
-                " Type: "+courseType+courseSections.toString();
+                " Type: "+courseType + "  " +courseSections.toString() + '\n';
     }
 }

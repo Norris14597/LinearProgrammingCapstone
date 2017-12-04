@@ -73,11 +73,10 @@ public class Professor {
                         if (d.getDay() == dayToAdd.getDay() && t.getStartTimeHour() == timeAdd.getStartTimeHour()
                                 && t.getStartTimeMinute() == timeAdd.getStartTimeMinute() && timeAdd.isTimeFilled()) {
                             t.setTimeFilled(true);
+                            t.setCoursePlaceHolder(timeAdd.getCoursePlaceHolder());
                         }
                     }
                 }
-
-
             }
         }
     }

@@ -5,6 +5,7 @@ package com.norris.course_scheduling;
  */
 public class TimeLength {
 
+    private String coursePlaceHolder;
     private int startTimeHour;
     private int startTimeMinute;
     private int endTimeHour;
@@ -12,7 +13,8 @@ public class TimeLength {
 
     private boolean isTimeFilled;
 
-    public TimeLength(int sh, int sm, int eh, int em) {
+    public TimeLength(String fill, int sh, int sm, int eh, int em) {
+        this.coursePlaceHolder = fill;
         this.startTimeHour = sh;
         this.startTimeMinute = sm;
         this.endTimeHour = eh;
@@ -25,6 +27,14 @@ public class TimeLength {
             isTimeFilled = true;
         else
             isTimeFilled = false;
+    }
+
+    public String getCoursePlaceHolder() {
+        return coursePlaceHolder;
+    }
+
+    public void setCoursePlaceHolder(String course) {
+        coursePlaceHolder = course;
     }
 
     public int getStartTimeHour() {
@@ -68,6 +78,6 @@ public class TimeLength {
     }
 
     public String toString() {
-        return "\n\t\tstarttime: "+String.format("%02d",startTimeHour)+":"+String.format("%02d",startTimeMinute)+"   |   "+"endtime: "+String.format("%02d",endTimeHour)+":"+String.format("%02d",endTimeMinute)+"   |   "+isTimeFilled;
+        return "\n\t\tstarttime: "+String.format("%02d",startTimeHour)+":"+String.format("%02d",startTimeMinute)+"   |   "+"endtime: "+String.format("%02d",endTimeHour)+":"+String.format("%02d",endTimeMinute)+"   |   "+String.format("%-5s",isTimeFilled)+"   |   "+String.format("%-32s",coursePlaceHolder)+"   |";
     }
 }

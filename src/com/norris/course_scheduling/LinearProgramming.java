@@ -203,7 +203,7 @@ public class LinearProgramming {
                         && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled());
             }
             else {
-                //there's not 1.5 hours left in the day so no class can be started here
+                    //there's not 1.5 hours left in the day so no class can be started here
                 return false;
             }
 

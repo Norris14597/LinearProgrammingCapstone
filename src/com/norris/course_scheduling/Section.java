@@ -8,7 +8,6 @@ public class Section {
     private String sectionID; //both course and section name
     private Professor professorAssigned;
 
-    private int hours;
     private Room roomAssigned; //one room per section
 
     private List<DayTimes> dayTimeAssigned; //holds value of time decision for each day
@@ -51,14 +50,6 @@ public class Section {
 
     public void setSectionID(String sectionID) {
         this.sectionID = sectionID;
-    }
-
-    public int getHours() {
-        return hours;
-    }
-
-    public void setHours(int hours) {
-        this.hours = hours;
     }
 
     public Room getRoomAssigned() {
