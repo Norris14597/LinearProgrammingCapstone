@@ -1,11 +1,14 @@
 package com.norris.course_scheduling;
 
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 //*********** POSSIBLE WAYS OF IMPROVEMENT *************** //
 //1. the first sections within the course lists will get priority on taking the first time slots. Possible
@@ -57,6 +60,9 @@ public class CourseSchedulingMain {
     private static final int SECTION_ASSIGNED = 1;
     private static final int SECTION_NOT_ASSIGNED = 0;
 
+    //private static List<DayTimes> bestWeekTimes = new ArrayList<>();
+
+
 
     public static void main(String[] args) {
 
@@ -78,6 +84,13 @@ public class CourseSchedulingMain {
         //outputPCR();
         double totalCourseSum = 0.0; //sum of all sections within a course
 
+        List<DayTimes> bestWeekTimes = new ArrayList<>();
+        bestWeekTimes.add(new DayTimes("Monday"));
+        bestWeekTimes.add(new DayTimes("Tuesday"));
+        bestWeekTimes.add(new DayTimes("Wednesday"));
+        bestWeekTimes.add(new DayTimes("Thursday"));
+        bestWeekTimes.add(new DayTimes("Friday"));
+
         //each course in course list
         for (Course c : courseList) {
             double totalSectionsSum = 0.0; //sum of all sections within a course
@@ -94,12 +107,12 @@ public class CourseSchedulingMain {
                 Room bestRoom = null;
 
                 //only for MWF professor temporarily holds best time slot for section to room
-                List<DayTimes> bestMWF = new ArrayList<DayTimes>();
+                List<DayTimes> bestMWF = new ArrayList<>();
                 bestMWF.add(new DayTimes("Monday"));
                 bestMWF.add(new DayTimes("Wednesday"));
                 bestMWF.add(new DayTimes("Friday"));
                 //only for TR professor temporarily holds best time slot for section to room
-                List<DayTimes> bestTR = new ArrayList<DayTimes>();
+                List<DayTimes> bestTR = new ArrayList<>();
                 bestTR.add(new DayTimes("Tuesday"));
                 bestTR.add(new DayTimes("Thursday"));
 
@@ -129,9 +142,10 @@ public class CourseSchedulingMain {
                                    //check if professor and room are both available during this time
                                     boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
                                     boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), d.getDay());
+                                    boolean isHourAvailableForCourse = LinearProgramming.isRoomTimesAvailable(j, bestWeekTimes, c.getCredits(), d.getDay());
 
                                     //professor is available for one hour + 15 minutes before and after
-                                    if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+                                    if (isHourAvailableForProfessor && isHourAvailableForRoom && isHourAvailableForCourse) {
                                         double sectionSum = Hij * roomEfficiency;
                                         if (sectionSum > bestSectionSum) {
                                             bestSectionSum = sectionSum;
@@ -163,10 +177,11 @@ public class CourseSchedulingMain {
                                     //check if professor and room are both available during this time
                                     boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
                                     boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), d.getDay());
+                                    boolean isHourAvailableForCourse = LinearProgramming.isRoomTimesAvailable(j, bestWeekTimes, c.getCredits(), d.getDay());
                                     //System.out.println("HOURS AVAILABLE: "+ j+" PROFESSOR OK TO TEACH: "+isHourAvailableForProfessor+"ROOM OK TO BE FILLED: "+isHourAvailableForRoom);
 
                                     //professor is available for one hour + 15 minutes before and after
-                                    if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+                                    if (isHourAvailableForProfessor && isHourAvailableForRoom && isHourAvailableForCourse) {
                                         double sectionSum = Hij * roomEfficiency;
                                         if (sectionSum > bestSectionSum) {
                                             bestSectionSum = sectionSum;
@@ -197,9 +212,10 @@ public class CourseSchedulingMain {
                                 //check if professor and room are both available during this time
                                 boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
                                 boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), professorDays.get(0).getDay());
+                                boolean isHourAvailableForCourse = LinearProgramming.isRoomTimesAvailable(j, bestWeekTimes, c.getCredits(), professorDays.get(0).getDay());
 
                                 //professor is available for one hour + 15 minutes before and after
-                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+                                if (isHourAvailableForProfessor && isHourAvailableForRoom && isHourAvailableForCourse) {
                                     double sectionSum = Hij * roomEfficiency;
                                     if (sectionSum > bestSectionSum) {
                                         bestSectionSum = sectionSum;
@@ -232,10 +248,11 @@ public class CourseSchedulingMain {
                                 //check if professor and room are both available during this time
                                 boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
                                 boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), professorDays.get(0).getDay());
+                                boolean isHourAvailableForCourse = LinearProgramming.isRoomTimesAvailable(j, bestWeekTimes, c.getCredits(), professorDays.get(0).getDay());
 
 
                                 //professor is available for one hour + 15 minutes before and after
-                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+                                if (isHourAvailableForProfessor && isHourAvailableForRoom && isHourAvailableForCourse) {
                                     double sectionSum = Hij * roomEfficiency;
                                     if (sectionSum > bestSectionSum) {
                                         bestSectionSum = sectionSum;
@@ -274,16 +291,23 @@ public class CourseSchedulingMain {
                     }
 
                     //    ASSIGN section the best room and ASSIGN day time slots when being taught
-                    System.out.println("Assigning course: " + s.getSectionID());
-                    s.setRoomAssigned(bestRoom);
-                    s.setDayTimeAssigned(bestTimes);
-                    //    ASSIGN professors' time slots with current section slots, add section to teaching list
-                    //p.setAvailableDayTimes(bestTimes);
-                    p.addDayTimes(bestTimes);
-                    p.getSectionsTaught().add(s);
-                    //assign best times to the best room fit
+                    try {
+                        System.out.println("Assigning course: " + s.getSectionID());
+                        s.setDayTimeAssigned(bestTimes);
+                        s.setRoomAssigned(bestRoom);
 
-                    bestRoom.addDayTimes(bestTimes);
+                        //    ASSIGN professors' time slots with current section slots, add section to teaching list
+                        p.addDayTimes(bestTimes);
+                        p.getSectionsTaught().add(s);
+
+
+                        //assign best times to the best room fit
+                        bestRoom.addDayTimes(bestTimes);
+                        bestWeekTimes = LinearProgramming.insertDayTimes(bestWeekTimes, bestTimes);
+                    } catch (NullPointerException e)
+                    {
+                        System.out.println("Failed to assign course " + s.getSectionID());
+                    }
                 }
                 totalSectionsSum += bestSectionSum;
             } // end sectionlist

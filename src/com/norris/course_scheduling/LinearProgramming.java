@@ -396,6 +396,33 @@ public class LinearProgramming {
 
     }
 
+    //takes the values from the schedule type (MWF or TH) and inserts it into a full week DayTimes list (MTWHF)
+    public static List<DayTimes> insertDayTimes(List<DayTimes> fullWeek, List<DayTimes> scheduleType) {
+
+        int days = scheduleType.size();
+
+        if (days > 2) {
+            for (int i = 0; i < fullWeek.get(0).getDayTimes().size(); i++) {
+                if (scheduleType.get(0).getDayTimes().get(i).isTimeFilled())
+                    fullWeek.get(0).getDayTimes().set(i, scheduleType.get(0).getDayTimes().get(i));
+                if (scheduleType.get(1).getDayTimes().get(i).isTimeFilled())
+                    fullWeek.get(2).getDayTimes().set(i, scheduleType.get(1).getDayTimes().get(i));
+                if (scheduleType.get(2).getDayTimes().get(i).isTimeFilled())
+                    fullWeek.get(4).getDayTimes().set(i, scheduleType.get(2).getDayTimes().get(i));
+            }
+        }
+        else {
+            for (int i = 0; i < fullWeek.get(0).getDayTimes().size(); i++) {
+                if (scheduleType.get(0).getDayTimes().get(i).isTimeFilled())
+                    fullWeek.get(1).getDayTimes().set(i, scheduleType.get(0).getDayTimes().get(i));
+                if (scheduleType.get(0).getDayTimes().get(i).isTimeFilled())
+                    fullWeek.get(3).getDayTimes().set(i, scheduleType.get(1).getDayTimes().get(i));
+            }
+        }
+
+        return fullWeek;
+    }
+
     //returns List of either MWF or TR with all times cleared
     public static List<DayTimes> clearAllTimeSlots(List<DayTimes> bestDays) {
         for (DayTimes d: bestDays) {
