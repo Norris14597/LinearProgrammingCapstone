@@ -161,7 +161,7 @@ public class CourseSchedulingMain {
                         } //end 1 credit and MWF schedule
 
                         // 1 credit and TR schedule
-                        if (c.getCredits() == 1 && professorScheduleType == "TR") {
+                        else if (c.getCredits() == 1 && professorScheduleType == "TR") {
                             for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
 
                                 //put professor into list for ease of passing to LP methods
@@ -197,7 +197,7 @@ public class CourseSchedulingMain {
                         } //end 1 credit and TR schedule
 
                         // 3 credits and MWF schedule
-                        if (c.getCredits() == 3 && professorScheduleType == "MWF") {
+                        else if (c.getCredits() == 3 && professorScheduleType == "MWF") {
                             //put professor into list for ease of passing to LP methods
                             List<DayTimes> professorDays = new ArrayList<>();
                             for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
@@ -231,7 +231,7 @@ public class CourseSchedulingMain {
 
 
                         // 3 credits and TR schedule
-                        if (c.getCredits() == 3 && professorScheduleType == "TR") {
+                        else if (c.getCredits() == 3 && professorScheduleType == "TR") {
 
                             //put professor into list for ease of passing to LP methods
                             List<DayTimes> professorDays = new ArrayList<>();
@@ -257,7 +257,7 @@ public class CourseSchedulingMain {
                                     if (sectionSum > bestSectionSum) {
                                         bestSectionSum = sectionSum;
                                         bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
-                                        bestMWF = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), professorDays.get(0).getDay());
+                                        bestTR = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), professorDays.get(0).getDay());
                                         bestRoom = r;
                                         isSectionAssigned = true;
                                     }
@@ -265,7 +265,10 @@ public class CourseSchedulingMain {
 
                             } //end times in tuesday
                         } //end 3 credit and TR schedule
+                        else
+                            System.out.println("INVALID SECTION INPUT******** " + s);
                     } //end if happy
+
                     //**** found best time fit for particular room (assuming all constraints met); there may be better room fits for section
                 } //end roomlist
 
@@ -321,17 +324,6 @@ public class CourseSchedulingMain {
 
         ObjectiveSum += totalCourseSum;
 
-//        for (Course c : courseList) {
-//            try {
-//                for (int i = 0; i < c.getCourseSections().size(); i++)
-//                if (c.getCourseSections().get(i).getRoomAssigned().getRoomNum() != "") {
-//                    filledCourses.add(c);
-//                }
-//            } catch (NullPointerException e) {
-//                missedCourses.add(c);
-//            }
-//        }
-
         outputPCR();
     }//end main
 
@@ -349,12 +341,10 @@ public class CourseSchedulingMain {
         roomList.forEach(System.out::println);
         System.out.println();
 
-        System.out.println("************* COURSES NOT ASSIGNED *************");
+        System.out.println("********* LIST OF SECTIONS NOT ASSIGNED *********");
         missedCourses.forEach(System.out::println);
 
     }
-
-
 
     //also, I left it random courses on my side.
     private static List<Course> getCourseList() {
