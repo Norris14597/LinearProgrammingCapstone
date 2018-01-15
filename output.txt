@@ -440,21 +440,21 @@ ROOM******** Number: EGR215E Seating: 33.0 Type: lab TIME:
 		starttime: 16:45   |   endtime: 17:00   |   false   |                                      |]]
 
 ************* COURSES NOT ASSIGNED *************
-COURSE******** Code: EGR103 Size: 15.0 Credits: 3  Type: projector  [
-	 SECTION: A   |   ID: EGR103A   |   Professor: Anthony Corso, 
-	 SECTION: B   |   ID: EGR103B   |   Professor: Larry Clement, 
-	 SECTION: C   |   ID: EGR103C   |   Professor: Creed Jones, 
-	 SECTION: D   |   ID: EGR103D   |   Professor: Mi Kyung Han]
 
-COURSE******** Code: EGR104 Size: 20.0 Credits: 3  Type: standard  [
-	 SECTION: A   |   ID: EGR104A   |   Professor: Kyungsoo Im, 
-	 SECTION: B   |   ID: EGR104B   |   Professor: Michael Kolta, 
-	 SECTION: C   |   ID: EGR104C   |   Professor: Arlene Louise Perkins, 
-	 SECTION: D   |   ID: EGR104D   |   Professor: Michael Kolta]
+	 SECTION: A   |   ID: EGR103A   |   Professor: Anthony Corso
 
-COURSE******** Code: EGR105 Size: 40.0 Credits: 3  Type: projector  [
-	 SECTION: A   |   ID: EGR105A   |   Professor: Anthony Corso, 
-	 SECTION: B   |   ID: EGR105B   |   Professor: Larry Clement, 
-	 SECTION: C   |   ID: EGR105C   |   Professor: Creed Jones, 
-	 SECTION: D   |   ID: EGR105D   |   Professor: Mi Kyung Han]
+	 SECTION: B   |   ID: EGR103B   |   Professor: Larry Clement
 
+	 SECTION: C   |   ID: EGR103C   |   Professor: Creed Jones
+
+	 SECTION: D   |   ID: EGR103D   |   Professor: Mi Kyung Han
+
+	 SECTION: D   |   ID: EGR104D   |   Professor: Michael Kolta
+
+	 SECTION: A   |   ID: EGR105A   |   Professor: Anthony Corso
+
+	 SECTION: B   |   ID: EGR105B   |   Professor: Larry Clement
+
+	 SECTION: C   |   ID: EGR105C   |   Professor: Creed Jones
+
+	 SECTION: D   |   ID: EGR105D   |   Professor: Mi Kyung Han
