@@ -30,6 +30,24 @@ public class Room {
 
     }
 
+    public void addDayTimes(List<DayTimes> dayTimesToAdd) {
+        for (DayTimes d : dayList) {
+            for (TimeLength t: d.getDayTimes()) {
+
+                for (DayTimes dayToAdd: dayTimesToAdd) {
+                    for (TimeLength timeAdd: dayToAdd.getDayTimes()) {
+                        //same day and same time and time to add is filled set day time
+                        if (d.getDay() == dayToAdd.getDay() && t.getStartTimeHour() == timeAdd.getStartTimeHour()
+                                && t.getStartTimeMinute() == timeAdd.getStartTimeMinute() && timeAdd.isTimeFilled()) {
+                            t.setTimeFilled(true);
+                            t.setCoursePlaceHolder(timeAdd.getCoursePlaceHolder());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public String getRoomNum() {
         return roomNum;
     }
@@ -68,24 +86,6 @@ public class Room {
 
     public void fill(String x, int y, int z){
         dayList.get(y).fillDay(x,z);
-    }
-
-    public void addDayTimes(List<DayTimes> dayTimesToAdd) {
-        for (DayTimes d : dayList) {
-            for (TimeLength t: d.getDayTimes()) {
-
-                for (DayTimes dayToAdd: dayTimesToAdd) {
-                    for (TimeLength timeAdd: dayToAdd.getDayTimes()) {
-                        //same day and same time and time to add is filled set day time
-                        if (d.getDay() == dayToAdd.getDay() && t.getStartTimeHour() == timeAdd.getStartTimeHour()
-                                && t.getStartTimeMinute() == timeAdd.getStartTimeMinute() && timeAdd.isTimeFilled()) {
-                            t.setTimeFilled(true);
-                            t.setCoursePlaceHolder(timeAdd.getCoursePlaceHolder());
-                        }
-                    }
-                }
-            }
-        }
     }
 
     public String toString () {

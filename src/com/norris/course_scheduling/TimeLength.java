@@ -21,7 +21,7 @@ public class TimeLength {
         this.endTimeMinute = em;
         this.isTimeFilled = false;
     }
-
+    
     public void setTrue(int x) {
         if (x == 1)
             isTimeFilled = true;
