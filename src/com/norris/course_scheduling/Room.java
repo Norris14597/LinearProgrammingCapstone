@@ -18,6 +18,7 @@ public class Room {
         this.seatingCapacity = seatingCapacity;
         this.roomType = roomType;
 
+        //every room available every day
         dayList = new ArrayList<DayTimes>();
         dayList.add(new DayTimes("Monday"));
         dayList.add(new DayTimes("Tuesday"));
@@ -70,6 +71,7 @@ public class Room {
         dayList.get(y).fillDay(x,z);
     }
 
+    //fill time slots for section to room
     public void addDayTimes(List<DayTimes> dayTimesToAdd) {
         for (DayTimes d : dayList) {
             for (TimeLength t: d.getDayTimes()) {

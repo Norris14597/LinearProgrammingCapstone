@@ -1,8 +1,6 @@
 package com.norris.course_scheduling;
 
-/**
- * Created by jennasowers on 11/27/17.
- */
+
 public class Dump {
 
     // TR SCHEDULE

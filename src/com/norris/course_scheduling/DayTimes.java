@@ -12,7 +12,9 @@ public class DayTimes {
         this.day = d;
 
         dayTimes = new ArrayList<>();
-        for (int i = 8; i < 17; i++) {
+        //8am to 9pm for i
+        //15 minute slots for each hour
+        for (int i = 8; i < 21; i++) {
             for (int j = 0; j <= 45; j+=15) {
                 if (j == 45) {
                     dayTimes.add(new TimeLength("", i, j, i + 1, 0));
