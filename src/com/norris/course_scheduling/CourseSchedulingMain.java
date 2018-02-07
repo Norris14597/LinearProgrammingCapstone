@@ -11,13 +11,6 @@ import java.util.List;
 //1. the first sections within the course lists will get priority on taking the first time slots. Possible
 //      solution is to loop through the algorithm with every possible ordering of each section in order to
 //      maximize the objective funciton further.
-//2. add another weighting for faculty preference to either teaching in the morning or afternoon:
-//      ex: Pij = {1.5 fits preference, 1 has no preference, .5 doesnt fit preference
-//      0 for not fitting preference would 0 out the sum of the section to room fit when it is possibly
-//      an ok fit so .5 is more appropriate
-//3. currently the main schedule can be viewed from each section: contains the room and times being taught
-//      as well as the professor teaching. Possibly add section string to professors and rooms to view what
-//      sections are occupying their time slots
 
 //*********** ENGINEERING SCHEDULING REQUIREMENTS *************** //
 //1. professor can choose either a MWF or TR schedule type
@@ -97,14 +90,11 @@ public class CourseSchedulingMain {
                     double Hij = LinearProgramming.happinessRoomVal(r, c);
                     double roomEfficiency = c.getCourseSize() / r.getSeatingCapacity(); // (course size/room seating)
 
-
                     //okay type and enough seats
                     if (Hij >= 1) {
-                        System.out.println(s.getSectionID()+" with room fit "+r.getBuilding()
-                                +r.getRoomNum()+" with vals: Hij"+Hij+" efficiency: "+roomEfficiency);
 
                         // 1 credit and MWF professor schedule
-                        if (c.getCredits() == 1 && professorScheduleType == "MWF") {
+                        if (c.getCredits() == 1 && professorScheduleType.equals("MWF")) {
                             //each day in professors schedule
                             for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
 
@@ -118,10 +108,7 @@ public class CourseSchedulingMain {
 
                                    //professor and room available during hour of day
                                     boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), d.getDay());
-                                    System.out.println("Is room available day: "+i+" time: "+j+": "+isHourAvailableForRoom);
-                                    //boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
-                                    boolean isHourAvailableForProfessor = false;
-                                    //System.out.println("Is professor available at "+i+" "+j+": "+isHourAvailableForProfessor);
+                                    boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
 
                                     //professor is available for one hour + 15 minutes before and after
                                     if (isHourAvailableForProfessor && isHourAvailableForRoom) {
@@ -140,107 +127,98 @@ public class CourseSchedulingMain {
                         } //end 1 credit and MWF schedule
 
                         // 1 credit and TR schedule
-//                        if (c.getCredits() == 1 && professorScheduleType == "TR") {
-//                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
-//
-//                                //put professor into list for ease of passing to LP methods
-//                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
-//                                List<DayTimes> professorDays = new ArrayList<>();
-//                                professorDays.add(d);
-//
-//                                //each "TimeLength" within a single a day: 15 minutes each for professor availability
-//                                System.out.println("DAY: ***************"+ d.getDay());
-//                                for (int j = 0; j < d.getDayTimes().size(); j++) {
-//                                    //System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
-//
-//                                    //check if professor and room are both available during this time
-//                                    boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
-//                                    boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), d.getDay());
-//                                    //System.out.println("HOURS AVAILABLE: "+ j+" PROFESSOR OK TO TEACH: "+isHourAvailableForProfessor+"ROOM OK TO BE FILLED: "+isHourAvailableForRoom);
-//
-//                                    //professor is available for one hour + 15 minutes before and after
-//                                    if (isHourAvailableForProfessor && isHourAvailableForRoom) {
-//                                        double sectionSum = Hij * roomEfficiency;
-//                                        if (sectionSum > bestSectionSum) {
-//                                            bestSectionSum = sectionSum;
-//                                            bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
-//                                            bestTR = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), d.getDay());
-//                                            bestRoom = r;
-//                                            isSectionAssigned = true;
-//                                        }
-//                                    }
-//
-//                                } //end times
-//                            } //end days
-//                        } //end 1 credit and TR schedule
+                        if (c.getCredits() == 1 && professorScheduleType.equals("TR")) {
+                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
+
+                                //put professor into list for ease of passing to LP methods
+                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
+                                List<DayTimes> professorDays = new ArrayList<>();
+                                professorDays.add(d);
+
+                                for (int j = 0; j < d.getDayTimes().size(); j++) {
+
+                                    //check if professor and room are both available during this time
+                                    boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
+                                    boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), d.getDay());
+
+                                    //professor is available for one hour + 15 minutes before and after
+                                    if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+                                        double sectionSum = Hij * roomEfficiency;
+                                        if (sectionSum > bestSectionSum) {
+                                            bestSectionSum = sectionSum;
+                                            bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
+                                            bestTR = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), d.getDay());
+                                            bestRoom = r;
+                                            isSectionAssigned = true;
+                                        }
+                                    }
+
+                                } //end times
+                            } //end days
+                        } //end 1 credit and TR schedule
 
                         // 3 credits and MWF schedule
-//                        if (c.getCredits() == 3 && professorScheduleType == "MWF") {
-//                            //put professor into list for ease of passing to LP methods
-//                            List<DayTimes> professorDays = new ArrayList<>();
-//                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
-//                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
-//                                professorDays.add(d);
-//                            }
-//
-//                            //each "TimeLength" within MONDAY: 15 minutes each for professor availability
-//                            for (int j = 0; j < professorDays.get(0).getDayTimes().size(); j++) {
-//                                //System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
-//
-//                                //check if professor and room are both available during this time
-//                                boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
-//                                boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), professorDays.get(0).getDay());
-//
-//                                //professor is available for one hour + 15 minutes before and after
-//                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
-//                                    double sectionSum = Hij * roomEfficiency;
-//                                    if (sectionSum > bestSectionSum) {
-//                                        bestSectionSum = sectionSum;
-//                                        bestMWF = LinearProgramming.clearAllTimeSlots(bestMWF);
-//                                        bestMWF = LinearProgramming.assignTimeSlots(bestMWF, j, c.getCredits(), professorDays.get(0).getDay());
-//                                        bestRoom = r;
-//                                        isSectionAssigned = true;
-//                                    }
-//                                }
-//
-//                            } //end times in Monday
-//                        } //end 3 credit and MWF schedule
+                        if (c.getCredits() == 3 && professorScheduleType.equals("MWF")) {
+
+                            List<DayTimes> professorDays = new ArrayList<>();
+                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
+                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
+                                professorDays.add(d);
+                            }
+
+
+                            for (int j = 0; j < professorDays.get(0).getDayTimes().size(); j++) {
+
+                                //check if professor and room are both available during this time
+                                boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
+                                boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), professorDays.get(0).getDay());
+
+                                //professor is available for one hour + 15 minutes before and after
+                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+                                    double sectionSum = Hij * roomEfficiency;
+                                    if (sectionSum > bestSectionSum) {
+                                        bestSectionSum = sectionSum;
+                                        bestMWF = LinearProgramming.clearAllTimeSlots(bestMWF);
+                                        bestMWF = LinearProgramming.assignTimeSlots(bestMWF, j, c.getCredits(), professorDays.get(0).getDay());
+                                        bestRoom = r;
+                                        isSectionAssigned = true;
+                                    }
+                                }
+
+                            } //end times in Monday
+                        } //end 3 credit and MWF schedule
 
 
                         // 3 credits and TR schedule
-//                        if (c.getCredits() == 3 && professorScheduleType == "TR") {
-//
-//                            //put professor into list for ease of passing to LP methods
-//                            List<DayTimes> professorDays = new ArrayList<>();
-//                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
-//                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
-//                                professorDays.add(d);
-//                                //System.out.println(p.getProfessorName()+" IS AVAILABLE DAYS "+d.getDay());
-//                            }
-//
-//                            //each "TimeLength" within TUESDAY: 15 minutes each for professor availability
-//                            for (int j = 0; j < professorDays.get(0).getDayTimes().size(); j++) {
-//                                //System.out.println("DAY TIME: "+ d.getDayTimes().get(j).toString());
-//
-//                                //check if professor and room are both available during this time
-//                                boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
-//                                boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), professorDays.get(0).getDay());
-//
-//
-//                                //professor is available for one hour + 15 minutes before and after
-//                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
-//                                    double sectionSum = Hij * roomEfficiency;
-//                                    if (sectionSum > bestSectionSum) {
-//                                        bestSectionSum = sectionSum;
-//                                        bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
-//                                        bestMWF = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), professorDays.get(0).getDay());
-//                                        bestRoom = r;
-//                                        isSectionAssigned = true;
-//                                    }
-//                                }
-//
-//                            } //end times in tuesday
-//                        } //end 3 credit and TR schedule
+                        if (c.getCredits() == 3 && professorScheduleType.equals("TR")) {
+
+                            List<DayTimes> professorDays = new ArrayList<>();
+                            for (int i = 0; i < p.getAvailableDayTimes().size(); i++) {
+                                DayTimes d = p.getAvailableDayTimes().get(i); //individual day
+                                professorDays.add(d);
+                            }
+
+                            for (int j = 0; j < professorDays.get(0).getDayTimes().size(); j++) {
+
+                                //check if professor and room are both available during this time
+                                boolean isHourAvailableForProfessor = LinearProgramming.isProfessorTimesAvailable(j, professorDays, c.getCredits());
+                                boolean isHourAvailableForRoom = LinearProgramming.isRoomTimesAvailable(j, roomDays, c.getCredits(), professorDays.get(0).getDay());
+
+
+                                //professor is available for one hour + 15 minutes before and after
+                                if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+                                    double sectionSum = Hij * roomEfficiency;
+                                    if (sectionSum > bestSectionSum) {
+                                        bestSectionSum = sectionSum;
+                                        bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
+                                        bestMWF = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), professorDays.get(0).getDay());
+                                        bestRoom = r;
+                                        isSectionAssigned = true;
+                                    }
+                                }
+
+                            } //end times in tuesday
+                        } //end 3 credit and TR schedule
 
                     } //end if happy
                     //**** found best time fit for particular room (assuming all constraints met); there may be better room fits for section
@@ -267,26 +245,31 @@ public class CourseSchedulingMain {
                         }
                     }
 
+                    try {
+                        //    ASSIGN section the best room and ASSIGN day time slots when being taught
+                        System.out.println("Assigning course: " + s.getSectionID() + " size: " + c.getCourseSize() + " to: "
+                                + bestRoom.getBuilding() + bestRoom.getRoomNum() + " with seating: " + bestRoom.getSeatingCapacity());
+                        System.out.println("At time: \n" + bestTimes);
+                        System.out.println("At " + bestRoom.getBuilding() + bestRoom.getRoomNum() + " time: \n" + bestRoom.getDayList());
+                        System.out.println("with professor: " + p.getProfessorName());
+                        System.out.println(p.getAvailableDayTimes());
+                        System.out.println();
+                        System.out.println();
 
-                    //    ASSIGN section the best room and ASSIGN day time slots when being taught
-                    System.out.println("Assigning course: " + s.getSectionID() + " size: "+c.getCourseSize() +" to: "
-                            +bestRoom.getBuilding()+bestRoom.getRoomNum()+" with seating: "+bestRoom.getSeatingCapacity());
-                    System.out.println("At time: \n"+bestTimes);
-                    System.out.println("At "+bestRoom.getBuilding()+bestRoom.getRoomNum()+" time: \n"+bestRoom.getDayList());
-                    System.out.println("with professor: " +p.getProfessorName());
-                    System.out.println(p.getAvailableDayTimes());
-                    System.out.println();
-                    System.out.println();
+                        s.setRoomAssigned(bestRoom);
+                        s.setDayTimeAssigned(bestTimes);
+                        //    ASSIGN professors' time slots with current section slots, add section to teaching list
+                        p.setAvailableDayTimes(bestTimes);
+                        p.addDayTimes(bestTimes);
+                        p.getSectionsTaught().add(s);
+                        //assign best times to the best room fit
 
-                    s.setRoomAssigned(bestRoom);
-                    s.setDayTimeAssigned(bestTimes);
-                    //    ASSIGN professors' time slots with current section slots, add section to teaching list
-                    //p.setAvailableDayTimes(bestTimes);
-                    p.addDayTimes(bestTimes);
-                    p.getSectionsTaught().add(s);
-                    //assign best times to the best room fit
+                        bestRoom.addDayTimes(bestTimes);
+                    } catch (NullPointerException np) {
+                        np.printStackTrace();
+                    }
 
-                    bestRoom.addDayTimes(bestTimes);
+
                 }
                 totalSectionsSum += bestSectionSum;
             } // end sectionlist
@@ -334,70 +317,122 @@ public class CourseSchedulingMain {
 
         List<Course> courseList = new ArrayList<Course>();
         char[] sectionIds = {'A', 'B', 'C', 'D'};
-        String[] courseName = {"EGR101", "EGR102", "EGR103", "EGR104", "EGR105", "EGR106", "EGR107", "EGRTest1Credit"};
+        String[] courseName = {"EGR101", "EGR102", "EGR103", "EGR104", "EGR105", "EGR106", "EGR107", "EGR108",
+            "EGR109", "EGR110", "EGR111", "EGR112", "EGR113", "EGR114"};
         String[] courseTypes = {"computer", "lab", "projector", "standard"};
 
+        //EGR101
+        List<Section> sectionList101 = new ArrayList<Section>();
+        sectionList101.add(new Section(sectionIds[0], courseName[0]+String.valueOf(sectionIds[0]), professorList.get(0)));
+        sectionList101.add(new Section(sectionIds[1], courseName[0]+String.valueOf(sectionIds[1]), professorList.get(1)));
+        sectionList101.add(new Section(sectionIds[2], courseName[0]+String.valueOf(sectionIds[2]), professorList.get(2)));
+        sectionList101.add(new Section(sectionIds[3], courseName[0]+String.valueOf(sectionIds[3]), professorList.get(3)));
+        courseList.add(new Course(courseName[0], 32, 3, courseTypes[3], sectionList101));
+
+        //EGR102
+        List<Section> sectionList102 = new ArrayList<Section>();
+        sectionList102.add(new Section(sectionIds[0], courseName[1]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList102.add(new Section(sectionIds[1], courseName[1]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        sectionList102.add(new Section(sectionIds[2], courseName[1]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList102.add(new Section(sectionIds[3], courseName[1]+String.valueOf(sectionIds[3]), professorList.get(5)));
+        courseList.add(new Course(courseName[1], 50, 3, courseTypes[3], sectionList102));
+
+        //EGR103
+        List<Section> sectionList103 = new ArrayList<Section>();
+        sectionList103.add(new Section(sectionIds[0], courseName[2]+String.valueOf(sectionIds[0]), professorList.get(0)));
+        sectionList103.add(new Section(sectionIds[1], courseName[2]+String.valueOf(sectionIds[1]), professorList.get(1)));
+        sectionList103.add(new Section(sectionIds[2], courseName[2]+String.valueOf(sectionIds[2]), professorList.get(2)));
+        sectionList103.add(new Section(sectionIds[3], courseName[2]+String.valueOf(sectionIds[3]), professorList.get(3)));
+        courseList.add(new Course(courseName[2], 15, 3, courseTypes[3], sectionList103));
+
+        //EGR104
+        List<Section> sectionList104 = new ArrayList<Section>();
+        sectionList104.add(new Section(sectionIds[0], courseName[3]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList104.add(new Section(sectionIds[1], courseName[3]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        sectionList104.add(new Section(sectionIds[2], courseName[3]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList104.add(new Section(sectionIds[3], courseName[3]+String.valueOf(sectionIds[3]), professorList.get(5)));
+        courseList.add(new Course(courseName[3], 20, 3, courseTypes[3], sectionList104));
+
+        //EGR105
+        List<Section> sectionList105 = new ArrayList<Section>();
+        sectionList105.add(new Section(sectionIds[0], courseName[4]+String.valueOf(sectionIds[0]), professorList.get(0)));
+        sectionList105.add(new Section(sectionIds[1], courseName[4]+String.valueOf(sectionIds[1]), professorList.get(1)));
+        sectionList105.add(new Section(sectionIds[2], courseName[4]+String.valueOf(sectionIds[2]), professorList.get(2)));
+        sectionList105.add(new Section(sectionIds[3], courseName[4]+String.valueOf(sectionIds[3]), professorList.get(3)));
+        courseList.add(new Course(courseName[4], 40, 3, courseTypes[3], sectionList105));
+
+        //EGR106
+        List<Section> sectionList106 = new ArrayList<Section>();
+        sectionList106.add(new Section(sectionIds[0], courseName[5]+String.valueOf(sectionIds[0]), professorList.get(0)));
+        sectionList106.add(new Section(sectionIds[1], courseName[5]+String.valueOf(sectionIds[1]), professorList.get(1)));
+        sectionList106.add(new Section(sectionIds[2], courseName[5]+String.valueOf(sectionIds[2]), professorList.get(2)));
+        sectionList106.add(new Section(sectionIds[3], courseName[5]+String.valueOf(sectionIds[3]), professorList.get(3)));
+        courseList.add(new Course(courseName[5], 50, 3, courseTypes[3], sectionList106));
+
         //EGR107
-        List<Section> sectionListTest = new ArrayList<Section>();
-        sectionListTest.add(new Section(sectionIds[0], courseName[7]+String.valueOf(sectionIds[0]), professorList.get(0)));
-        courseList.add(new Course(courseName[7], 99, 1, courseTypes[3], sectionListTest));//course name, peopel, credits, type,sections
+        List<Section> sectionList107 = new ArrayList<Section>();
+        sectionList107.add(new Section(sectionIds[0], courseName[6]+String.valueOf(sectionIds[0]), professorList.get(0)));
+        sectionList107.add(new Section(sectionIds[1], courseName[6]+String.valueOf(sectionIds[1]), professorList.get(1)));
+        sectionList107.add(new Section(sectionIds[2], courseName[6]+String.valueOf(sectionIds[2]), professorList.get(2)));
+        sectionList107.add(new Section(sectionIds[3], courseName[6]+String.valueOf(sectionIds[3]), professorList.get(3)));
+        courseList.add(new Course(courseName[6], 10, 3, courseTypes[3], sectionList107));//course name, peopel, credits, type,sections
 
+        //EGR108
+        List<Section> sectionList108 = new ArrayList<Section>();
+        sectionList108.add(new Section(sectionIds[0], courseName[7]+String.valueOf(sectionIds[0]), professorList.get(0)));
+        sectionList108.add(new Section(sectionIds[1], courseName[7]+String.valueOf(sectionIds[1]), professorList.get(1)));
+        sectionList108.add(new Section(sectionIds[2], courseName[7]+String.valueOf(sectionIds[2]), professorList.get(2)));
+        sectionList108.add(new Section(sectionIds[3], courseName[7]+String.valueOf(sectionIds[3]), professorList.get(3)));
+        courseList.add(new Course(courseName[7], 40, 1, courseTypes[3], sectionList108));//course name, peopel, credits, type,sections
 
-//        //EGR107
-//        List<Section> sectionList107 = new ArrayList<Section>();
-//        sectionList107.add(new Section(sectionIds[0], courseName[6]+String.valueOf(sectionIds[0]), professorList.get(0)));
-//        sectionList107.add(new Section(sectionIds[1], courseName[6]+String.valueOf(sectionIds[1]), professorList.get(1)));
-//        sectionList107.add(new Section(sectionIds[2], courseName[6]+String.valueOf(sectionIds[2]), professorList.get(2)));
-//        sectionList107.add(new Section(sectionIds[3], courseName[6]+String.valueOf(sectionIds[3]), professorList.get(3)));
-//        courseList.add(new Course(courseName[6], 10, 3, courseTypes[3], sectionList107));//course name, peopel, credits, type,sections
+        //EGR109
+        List<Section> sectionList109 = new ArrayList<Section>();
+        sectionList109.add(new Section(sectionIds[0], courseName[8]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList109.add(new Section(sectionIds[1], courseName[8]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        sectionList109.add(new Section(sectionIds[2], courseName[8]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList109.add(new Section(sectionIds[3], courseName[8]+String.valueOf(sectionIds[3]), professorList.get(7)));
+        courseList.add(new Course(courseName[8], 30, 3, courseTypes[3], sectionList109));//course name, peopel, credits, type,sections
 
-//        //EGR106
-//        List<Section> sectionList106 = new ArrayList<Section>();
-//        sectionList106.add(new Section(sectionIds[0], courseName[5]+String.valueOf(sectionIds[0]), professorList.get(0)));
-//        sectionList106.add(new Section(sectionIds[1], courseName[5]+String.valueOf(sectionIds[1]), professorList.get(1)));
-//        sectionList106.add(new Section(sectionIds[2], courseName[5]+String.valueOf(sectionIds[2]), professorList.get(2)));
-//        sectionList106.add(new Section(sectionIds[3], courseName[5]+String.valueOf(sectionIds[3]), professorList.get(3)));
-//        courseList.add(new Course(courseName[5], 50, 3, courseTypes[3], sectionList106));
-//
-//        //EGR101
-//        List<Section> sectionList101 = new ArrayList<Section>();
-//        sectionList101.add(new Section(sectionIds[0], courseName[0]+String.valueOf(sectionIds[0]), professorList.get(0)));
-//        sectionList101.add(new Section(sectionIds[1], courseName[0]+String.valueOf(sectionIds[1]), professorList.get(1)));
-//        sectionList101.add(new Section(sectionIds[2], courseName[0]+String.valueOf(sectionIds[2]), professorList.get(2)));
-//        sectionList101.add(new Section(sectionIds[3], courseName[0]+String.valueOf(sectionIds[3]), professorList.get(3)));
-//        courseList.add(new Course(courseName[0], 32, 3, courseTypes[3], sectionList101));
-//
-//        //EGR102
-//        List<Section> sectionList102 = new ArrayList<Section>();
-//        sectionList102.add(new Section(sectionIds[0], courseName[1]+String.valueOf(sectionIds[0]), professorList.get(4)));
-//        sectionList102.add(new Section(sectionIds[1], courseName[1]+String.valueOf(sectionIds[1]), professorList.get(5)));
-//        sectionList102.add(new Section(sectionIds[2], courseName[1]+String.valueOf(sectionIds[2]), professorList.get(6)));
-//        sectionList102.add(new Section(sectionIds[3], courseName[1]+String.valueOf(sectionIds[3]), professorList.get(5)));
-//        courseList.add(new Course(courseName[1], 50, 3, courseTypes[3], sectionList102));
-//
-//        //EGR103
-//        List<Section> sectionList103 = new ArrayList<Section>();
-//        sectionList103.add(new Section(sectionIds[0], courseName[2]+String.valueOf(sectionIds[0]), professorList.get(0)));
-//        sectionList103.add(new Section(sectionIds[1], courseName[2]+String.valueOf(sectionIds[1]), professorList.get(1)));
-//        sectionList103.add(new Section(sectionIds[2], courseName[2]+String.valueOf(sectionIds[2]), professorList.get(2)));
-//        sectionList103.add(new Section(sectionIds[3], courseName[2]+String.valueOf(sectionIds[3]), professorList.get(3)));
-//        courseList.add(new Course(courseName[2], 15, 3, courseTypes[3], sectionList103));
-//
-//        //EGR104
-//        List<Section> sectionList104 = new ArrayList<Section>();
-//        sectionList104.add(new Section(sectionIds[0], courseName[3]+String.valueOf(sectionIds[0]), professorList.get(4)));
-//        sectionList104.add(new Section(sectionIds[1], courseName[3]+String.valueOf(sectionIds[1]), professorList.get(5)));
-//        sectionList104.add(new Section(sectionIds[2], courseName[3]+String.valueOf(sectionIds[2]), professorList.get(6)));
-//        sectionList104.add(new Section(sectionIds[3], courseName[3]+String.valueOf(sectionIds[3]), professorList.get(5)));
-//        courseList.add(new Course(courseName[3], 20, 3, courseTypes[3], sectionList104));
-//
-//        //EGR105
-//        List<Section> sectionList105 = new ArrayList<Section>();
-//        sectionList105.add(new Section(sectionIds[0], courseName[4]+String.valueOf(sectionIds[0]), professorList.get(0)));
-//        sectionList105.add(new Section(sectionIds[1], courseName[4]+String.valueOf(sectionIds[1]), professorList.get(1)));
-//        sectionList105.add(new Section(sectionIds[2], courseName[4]+String.valueOf(sectionIds[2]), professorList.get(2)));
-//        sectionList105.add(new Section(sectionIds[3], courseName[4]+String.valueOf(sectionIds[3]), professorList.get(3)));
-//        courseList.add(new Course(courseName[4], 40, 3, courseTypes[3], sectionList105));
+        //EGR110
+        List<Section> sectionList110 = new ArrayList<Section>();
+        sectionList110.add(new Section(sectionIds[0], courseName[9]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList110.add(new Section(sectionIds[1], courseName[9]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        sectionList110.add(new Section(sectionIds[2], courseName[9]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList110.add(new Section(sectionIds[3], courseName[9]+String.valueOf(sectionIds[3]), professorList.get(7)));
+        courseList.add(new Course(courseName[9], 30, 1, courseTypes[3], sectionList110));//course name, peopel, credits, type,sections
+
+        //EGR111
+        List<Section> sectionList111 = new ArrayList<Section>();
+        sectionList111.add(new Section(sectionIds[0], courseName[10]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList111.add(new Section(sectionIds[1], courseName[10]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        sectionList111.add(new Section(sectionIds[2], courseName[10]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList111.add(new Section(sectionIds[3], courseName[10]+String.valueOf(sectionIds[3]), professorList.get(7)));
+        courseList.add(new Course(courseName[10], 33, 3, courseTypes[3], sectionList111));//course name, peopel, credits, type,sections
+
+        //EGR112
+        List<Section> sectionList112 = new ArrayList<Section>();
+        sectionList112.add(new Section(sectionIds[0], courseName[11]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList112.add(new Section(sectionIds[1], courseName[11]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        sectionList112.add(new Section(sectionIds[2], courseName[11]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList112.add(new Section(sectionIds[3], courseName[11]+String.valueOf(sectionIds[3]), professorList.get(7)));
+        courseList.add(new Course(courseName[11], 50, 3, courseTypes[3], sectionList112));//course name, peopel, credits, type,sections
+
+        //EGR113
+        List<Section> sectionList113 = new ArrayList<Section>();
+        sectionList113.add(new Section(sectionIds[0], courseName[12]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList113.add(new Section(sectionIds[1], courseName[12]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        sectionList113.add(new Section(sectionIds[2], courseName[12]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList113.add(new Section(sectionIds[3], courseName[12]+String.valueOf(sectionIds[3]), professorList.get(7)));
+        courseList.add(new Course(courseName[12], 30, 3, courseTypes[3], sectionList113));//course name, peopel, credits, type,sections
+
+        //EGR114
+        List<Section> sectionList114 = new ArrayList<Section>();
+        sectionList114.add(new Section(sectionIds[0], courseName[13]+String.valueOf(sectionIds[0]), professorList.get(4)));
+        sectionList114.add(new Section(sectionIds[1], courseName[13]+String.valueOf(sectionIds[1]), professorList.get(5)));
+        //sectionList114.add(new Section(sectionIds[2], courseName[13]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        //sectionList114.add(new Section(sectionIds[3], courseName[13]+String.valueOf(sectionIds[3]), professorList.get(7)));
+        courseList.add(new Course(courseName[13], 30, 3, courseTypes[3], sectionList114));//course name, peopel, credits, type,sections
+
 
         return courseList;
     }
@@ -405,21 +440,21 @@ public class CourseSchedulingMain {
     private static List<Room> getRoomList() {
         List<Room> roomList = new ArrayList<Room>();
 
-//        Room a = new Room("100J", "EGR", 55, "standard");
-//        Room b = new Room("215E", "EGR", 33, "standard");
-//        Room c = new Room("215A", "EGR", 40, "standard");
+        Room a = new Room("100J", "EGR", 55, "standard");
+        Room b = new Room("215E", "EGR", 33, "standard");
+        Room c = new Room("215A", "EGR", 40, "standard");
         Room test = new Room("TTT", "EGR", 100, "standard");
 
         //testing room
-//        for(int i = 0; i < 5; i++){
-//            for (int j = 0; j < 31; j++) {
-//                test.getDayList().get(i).getDayTimes().get(j).setTimeFilled(true);
-//            }
-//        }
+        for(int i = 0; i < 5; i++){
+            for (int j = 0; j < 52; j++) {
+                test.getDayList().get(i).getDayTimes().get(j).setTimeFilled(true);
+            }
+        }
 
-//        roomList.add(a);
-//        roomList.add(b);
-//        roomList.add(c);
+        roomList.add(a);
+        roomList.add(b);
+        roomList.add(c);
         roomList.add(test);
 
         return roomList;
@@ -435,18 +470,17 @@ public class CourseSchedulingMain {
         Professor Kolta = new Professor("Michael Kolta", new String[] {"Monday", "Wednesday", "Friday"});
         Professor Perkins = new Professor("Arlene Louise Perkins", new String[] {"Tuesday", "Thursday"});
 
-        Professor MrTest = new Professor("Mr TestMWF", new String[] {"Monday", "Wednesday", "Friday"});
-        //MrTest.getAvailableDayTimes().get(0).getDayTimes().get(0).setTimeFilled(true);
+        Professor MrTest = new Professor("Mr TestMWF", new String[] {"Tuesday", "Thursday"});
+
+
+        professors.add(Corso);
+        professors.add(Clement);
+        professors.add(Jones);
+        professors.add(Han);
+        professors.add(Im);
+        professors.add(Kolta);
+        professors.add(Perkins);
         professors.add(MrTest);
-
-
-//        professors.add(Corso);
-//        professors.add(Clement);
-//        professors.add(Jones);
-//        professors.add(Han);
-//        professors.add(Im);
-//        professors.add(Kolta);
-//        professors.add(Perkins);
 
         return professors;
     }
