@@ -227,21 +227,17 @@ public class LinearProgramming {
                 index = 0;
         }
 
-        System.out.println("In room times: day "+day+" time: "+index);
 
         //one credit on any day
         if (credits == 1) {
-            System.out.println("in one credit for any day");
             if (timeIndex == 0) { //beginning day check: !15before + 15after
-                System.out.println("in time index zero start of day: index"+timeIndex);
                 return (!days.get(index).getDayTimes().get(timeIndex).isTimeFilled()
                         && !days.get(index).getDayTimes().get(timeIndex + 1).isTimeFilled()
                         && !days.get(index).getDayTimes().get(timeIndex + 2).isTimeFilled()
                         && !days.get(index).getDayTimes().get(timeIndex + 3).isTimeFilled()
                         && !days.get(index).getDayTimes().get(timeIndex + 4).isTimeFilled());
             }
-            else if (timeIndex + 4 == 51) { //end day check: 15before + !15after
-                System.out.println("in time index 48 end of day: index"+timeIndex);
+            else if (timeIndex + 3 == 51) { //end day check: 15before + !15after
                 return (!days.get(index).getDayTimes().get(timeIndex - 1).isTimeFilled()
                         && !days.get(index).getDayTimes().get(timeIndex).isTimeFilled()
                         && !days.get(index).getDayTimes().get(timeIndex + 1).isTimeFilled()
@@ -249,7 +245,6 @@ public class LinearProgramming {
                         && !days.get(index).getDayTimes().get(timeIndex + 3).isTimeFilled());
             }
             else if(timeIndex == 49 || timeIndex == 50 || timeIndex == 51) {
-                System.out.println("Cant start hour class with 45 minutes: index"+timeIndex);
                 return false;
             }
             else { //all other cases

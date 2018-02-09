@@ -245,31 +245,25 @@ public class CourseSchedulingMain {
                         }
                     }
 
-                    try {
                         //    ASSIGN section the best room and ASSIGN day time slots when being taught
-                        System.out.println("Assigning course: " + s.getSectionID() + " size: " + c.getCourseSize() + " to: "
-                                + bestRoom.getBuilding() + bestRoom.getRoomNum() + " with seating: " + bestRoom.getSeatingCapacity());
-                        System.out.println("At time: \n" + bestTimes);
-                        System.out.println("At " + bestRoom.getBuilding() + bestRoom.getRoomNum() + " time: \n" + bestRoom.getDayList());
-                        System.out.println("with professor: " + p.getProfessorName());
-                        System.out.println(p.getAvailableDayTimes());
-                        System.out.println();
-                        System.out.println();
+                    System.out.println("Assigning course: " + s.getSectionID() + " size: " + c.getCourseSize() + " to: "
+                            + bestRoom.getBuilding() + bestRoom.getRoomNum() + " with seating: " + bestRoom.getSeatingCapacity());
+                    //System.out.println("At time: \n" + bestTimes);
+                    //System.out.println("At " + bestRoom.getBuilding() + bestRoom.getRoomNum() + " time: \n" + bestRoom.getDayList());
+                    System.out.println("with professor: " + p.getProfessorName());
+                    //System.out.println(p.getAvailableDayTimes());
+                    System.out.println();
+                    System.out.println();
 
-                        s.setRoomAssigned(bestRoom);
-                        s.setDayTimeAssigned(bestTimes);
-                        //    ASSIGN professors' time slots with current section slots, add section to teaching list
-                        p.setAvailableDayTimes(bestTimes);
-                        p.addDayTimes(bestTimes);
-                        p.getSectionsTaught().add(s);
-                        //assign best times to the best room fit
+                    s.setRoomAssigned(bestRoom);
+                    s.setDayTimeAssigned(bestTimes);
+                    //    ASSIGN professors' time slots with current section slots, add section to teaching list
+                    p.setAvailableDayTimes(bestTimes);
+                    p.addDayTimes(bestTimes);
+                    p.getSectionsTaught().add(s);
+                    //assign best times to the best room fit
 
-                        bestRoom.addDayTimes(bestTimes);
-                    } catch (NullPointerException np) {
-                        np.printStackTrace();
-                    }
-
-
+                    bestRoom.addDayTimes(bestTimes);
                 }
                 totalSectionsSum += bestSectionSum;
             } // end sectionlist
@@ -327,7 +321,7 @@ public class CourseSchedulingMain {
         sectionList101.add(new Section(sectionIds[1], courseName[0]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList101.add(new Section(sectionIds[2], courseName[0]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList101.add(new Section(sectionIds[3], courseName[0]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[0], 32, 3, courseTypes[3], sectionList101));
+        courseList.add(new Course(courseName[0], 32, 3, courseTypes[3], sectionList101, "default"));
 
         //EGR102
         List<Section> sectionList102 = new ArrayList<Section>();
@@ -335,7 +329,7 @@ public class CourseSchedulingMain {
         sectionList102.add(new Section(sectionIds[1], courseName[1]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList102.add(new Section(sectionIds[2], courseName[1]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList102.add(new Section(sectionIds[3], courseName[1]+String.valueOf(sectionIds[3]), professorList.get(5)));
-        courseList.add(new Course(courseName[1], 50, 3, courseTypes[3], sectionList102));
+        courseList.add(new Course(courseName[1], 50, 3, courseTypes[3], sectionList102, "default"));
 
         //EGR103
         List<Section> sectionList103 = new ArrayList<Section>();
@@ -343,7 +337,7 @@ public class CourseSchedulingMain {
         sectionList103.add(new Section(sectionIds[1], courseName[2]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList103.add(new Section(sectionIds[2], courseName[2]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList103.add(new Section(sectionIds[3], courseName[2]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[2], 15, 3, courseTypes[3], sectionList103));
+        courseList.add(new Course(courseName[2], 15, 3, courseTypes[3], sectionList103, "default"));
 
         //EGR104
         List<Section> sectionList104 = new ArrayList<Section>();
@@ -351,7 +345,7 @@ public class CourseSchedulingMain {
         sectionList104.add(new Section(sectionIds[1], courseName[3]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList104.add(new Section(sectionIds[2], courseName[3]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList104.add(new Section(sectionIds[3], courseName[3]+String.valueOf(sectionIds[3]), professorList.get(5)));
-        courseList.add(new Course(courseName[3], 20, 3, courseTypes[3], sectionList104));
+        courseList.add(new Course(courseName[3], 20, 3, courseTypes[3], sectionList104, "default"));
 
         //EGR105
         List<Section> sectionList105 = new ArrayList<Section>();
@@ -359,7 +353,7 @@ public class CourseSchedulingMain {
         sectionList105.add(new Section(sectionIds[1], courseName[4]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList105.add(new Section(sectionIds[2], courseName[4]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList105.add(new Section(sectionIds[3], courseName[4]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[4], 40, 3, courseTypes[3], sectionList105));
+        courseList.add(new Course(courseName[4], 40, 3, courseTypes[3], sectionList105, "default"));
 
         //EGR106
         List<Section> sectionList106 = new ArrayList<Section>();
@@ -367,7 +361,7 @@ public class CourseSchedulingMain {
         sectionList106.add(new Section(sectionIds[1], courseName[5]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList106.add(new Section(sectionIds[2], courseName[5]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList106.add(new Section(sectionIds[3], courseName[5]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[5], 50, 3, courseTypes[3], sectionList106));
+        courseList.add(new Course(courseName[5], 50, 3, courseTypes[3], sectionList106, "default"));
 
         //EGR107
         List<Section> sectionList107 = new ArrayList<Section>();
@@ -375,7 +369,7 @@ public class CourseSchedulingMain {
         sectionList107.add(new Section(sectionIds[1], courseName[6]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList107.add(new Section(sectionIds[2], courseName[6]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList107.add(new Section(sectionIds[3], courseName[6]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[6], 10, 3, courseTypes[3], sectionList107));//course name, peopel, credits, type,sections
+        courseList.add(new Course(courseName[6], 10, 3, courseTypes[3], sectionList107, "default"));//course name, peopel, credits, type,sections
 
         //EGR108
         List<Section> sectionList108 = new ArrayList<Section>();
@@ -383,7 +377,7 @@ public class CourseSchedulingMain {
         sectionList108.add(new Section(sectionIds[1], courseName[7]+String.valueOf(sectionIds[1]), professorList.get(1)));
         sectionList108.add(new Section(sectionIds[2], courseName[7]+String.valueOf(sectionIds[2]), professorList.get(2)));
         sectionList108.add(new Section(sectionIds[3], courseName[7]+String.valueOf(sectionIds[3]), professorList.get(3)));
-        courseList.add(new Course(courseName[7], 40, 1, courseTypes[3], sectionList108));//course name, peopel, credits, type,sections
+        courseList.add(new Course(courseName[7], 40, 1, courseTypes[3], sectionList108, "default"));//course name, peopel, credits, type,sections
 
         //EGR109
         List<Section> sectionList109 = new ArrayList<Section>();
@@ -391,7 +385,7 @@ public class CourseSchedulingMain {
         sectionList109.add(new Section(sectionIds[1], courseName[8]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList109.add(new Section(sectionIds[2], courseName[8]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList109.add(new Section(sectionIds[3], courseName[8]+String.valueOf(sectionIds[3]), professorList.get(7)));
-        courseList.add(new Course(courseName[8], 30, 3, courseTypes[3], sectionList109));//course name, peopel, credits, type,sections
+        courseList.add(new Course(courseName[8], 30, 3, courseTypes[3], sectionList109, "default"));//course name, peopel, credits, type,sections
 
         //EGR110
         List<Section> sectionList110 = new ArrayList<Section>();
@@ -399,7 +393,7 @@ public class CourseSchedulingMain {
         sectionList110.add(new Section(sectionIds[1], courseName[9]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList110.add(new Section(sectionIds[2], courseName[9]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList110.add(new Section(sectionIds[3], courseName[9]+String.valueOf(sectionIds[3]), professorList.get(7)));
-        courseList.add(new Course(courseName[9], 30, 1, courseTypes[3], sectionList110));//course name, peopel, credits, type,sections
+        courseList.add(new Course(courseName[9], 30, 1, courseTypes[3], sectionList110, "default"));//course name, peopel, credits, type,sections
 
         //EGR111
         List<Section> sectionList111 = new ArrayList<Section>();
@@ -407,7 +401,7 @@ public class CourseSchedulingMain {
         sectionList111.add(new Section(sectionIds[1], courseName[10]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList111.add(new Section(sectionIds[2], courseName[10]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList111.add(new Section(sectionIds[3], courseName[10]+String.valueOf(sectionIds[3]), professorList.get(7)));
-        courseList.add(new Course(courseName[10], 33, 3, courseTypes[3], sectionList111));//course name, peopel, credits, type,sections
+        courseList.add(new Course(courseName[10], 33, 3, courseTypes[3], sectionList111, "default"));//course name, peopel, credits, type,sections
 
         //EGR112
         List<Section> sectionList112 = new ArrayList<Section>();
@@ -415,7 +409,7 @@ public class CourseSchedulingMain {
         sectionList112.add(new Section(sectionIds[1], courseName[11]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList112.add(new Section(sectionIds[2], courseName[11]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList112.add(new Section(sectionIds[3], courseName[11]+String.valueOf(sectionIds[3]), professorList.get(7)));
-        courseList.add(new Course(courseName[11], 50, 3, courseTypes[3], sectionList112));//course name, peopel, credits, type,sections
+        courseList.add(new Course(courseName[11], 50, 3, courseTypes[3], sectionList112, "default"));//course name, peopel, credits, type,sections
 
         //EGR113
         List<Section> sectionList113 = new ArrayList<Section>();
@@ -423,7 +417,7 @@ public class CourseSchedulingMain {
         sectionList113.add(new Section(sectionIds[1], courseName[12]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList113.add(new Section(sectionIds[2], courseName[12]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList113.add(new Section(sectionIds[3], courseName[12]+String.valueOf(sectionIds[3]), professorList.get(7)));
-        courseList.add(new Course(courseName[12], 30, 3, courseTypes[3], sectionList113));//course name, peopel, credits, type,sections
+        courseList.add(new Course(courseName[12], 30, 3, courseTypes[3], sectionList113, "default"));//course name, peopel, credits, type,sections
 
         //EGR114
         List<Section> sectionList114 = new ArrayList<Section>();
@@ -431,7 +425,7 @@ public class CourseSchedulingMain {
         sectionList114.add(new Section(sectionIds[1], courseName[13]+String.valueOf(sectionIds[1]), professorList.get(5)));
         //sectionList114.add(new Section(sectionIds[2], courseName[13]+String.valueOf(sectionIds[2]), professorList.get(6)));
         //sectionList114.add(new Section(sectionIds[3], courseName[13]+String.valueOf(sectionIds[3]), professorList.get(7)));
-        courseList.add(new Course(courseName[13], 30, 3, courseTypes[3], sectionList114));//course name, peopel, credits, type,sections
+        courseList.add(new Course(courseName[13], 30, 3, courseTypes[3], sectionList114, "default"));//course name, peopel, credits, type,sections
 
 
         return courseList;
@@ -445,12 +439,12 @@ public class CourseSchedulingMain {
         Room c = new Room("215A", "EGR", 40, "standard");
         Room test = new Room("TTT", "EGR", 100, "standard");
 
-        //testing room
-        for(int i = 0; i < 5; i++){
-            for (int j = 0; j < 52; j++) {
-                test.getDayList().get(i).getDayTimes().get(j).setTimeFilled(true);
-            }
-        }
+//        //testing room
+//        for(int i = 0; i < 5; i++){
+//            for (int j = 0; j < 52; j++) {
+//                test.getDayList().get(i).getDayTimes().get(j).setTimeFilled(true);
+//            }
+//        }
 
         roomList.add(a);
         roomList.add(b);

@@ -10,13 +10,15 @@ public class Course {
     private int credits;
     private String courseType;
     private List<Section> courseSections;
+    private String overlap;
 
 
-    public Course(String id, double size, int credits, String type, List<Section> sections){
+    public Course(String id, double size, int credits, String type, List<Section> sections, String overlapType){
         this.courseCode = id;
         this.courseSize = size;
         this.credits = credits;
         this.courseType = type;
+        this. overlap = overlapType;
 
         this.courseSections = sections;
     }
@@ -56,6 +58,8 @@ public class Course {
     public void setCourseSections(List<Section> courseSections) {
         this.courseSections = courseSections;
     }
+
+    public String getOverlap() { return this.overlap;}
 
     public String toString () {
         return "COURSE******** Code: "+courseCode+" Size: "+courseSize+" Credits: "+credits+" "+
