@@ -71,7 +71,7 @@ public class CourseSchedulingMain {
                 Professor p = s.getProfessorAssigned(); //professor teaching the section
                 String professorScheduleType = (p.getAvailableDayTimes().get(0).getDay() == "Monday") ? "MWF" : "TR";
                 double bestSectionSum = 0.0; //best section fit
-                Room bestRoom = null; //best room fit
+                Room bestRoom = new Room(); //best room fit
 
                 //only for MWF professor temporarily holds best time slot for section to room
                 List<DayTimes> bestMWF = new ArrayList<DayTimes>();
@@ -249,10 +249,10 @@ public class CourseSchedulingMain {
                         //    ASSIGN section the best room and ASSIGN day time slots when being taught
                         System.out.println("Assigning course: " + s.getSectionID() + " size: " + c.getCourseSize() + " to: "
                                 + bestRoom.getBuilding() + bestRoom.getRoomNum() + " with seating: " + bestRoom.getSeatingCapacity());
-                        System.out.println("At time: \n" + bestTimes);
-                        System.out.println("At " + bestRoom.getBuilding() + bestRoom.getRoomNum() + " time: \n" + bestRoom.getDayList());
+                       // System.out.println("At time: \n" + bestTimes);
+                       // System.out.println("At " + bestRoom.getBuilding() + bestRoom.getRoomNum() + " time: \n" + bestRoom.getDayList());
                         System.out.println("with professor: " + p.getProfessorName());
-                        System.out.println(p.getAvailableDayTimes());
+                        //System.out.println(p.getAvailableDayTimes());
                         System.out.println();
                         System.out.println();
 

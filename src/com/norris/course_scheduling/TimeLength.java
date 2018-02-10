@@ -1,8 +1,5 @@
 package com.norris.course_scheduling;
 
-/**
- * Created by jennasowers on 11/8/17.
- */
 public class TimeLength {
 
     private String coursePlaceHolder;
