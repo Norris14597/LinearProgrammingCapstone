@@ -46,7 +46,6 @@ public class CourseSchedulingMain {
         professorList = getProfessorList();
         courseList = getCourseList();
         roomList = getRoomList();
-        //outputPCR();
 
         //all sums based off: room to course happiness{1.5,1,0} * (course population/room size) * decision{1,0}
         double ObjectiveSum = 0.0; //objective value to be maximized
@@ -63,10 +62,11 @@ public class CourseSchedulingMain {
         //each course in course list
         for (Course c : courseList) {
             double totalSectionsSum = 0.0; //sum of all sections within a course
-            boolean isSectionAssigned = false;
+
 
             //each section within a course
             for (Section s : c.getCourseSections()) {
+                boolean isSectionAssigned = false;
 
                 Professor p = s.getProfessorAssigned(); //professor teaching the section
                 String professorScheduleType = (p.getAvailableDayTimes().get(0).getDay() == "Monday") ? "MWF" : "TR";
@@ -90,8 +90,11 @@ public class CourseSchedulingMain {
                     double Hij = LinearProgramming.happinessRoomVal(r, c);
                     double roomEfficiency = c.getCourseSize() / r.getSeatingCapacity(); // (course size/room seating)
 
+                    System.out.println("In section: "+s.getSectionID()+" with "+p.getProfessorName()+" in room: "
+                            +r.getBuilding()+r.getRoomNum());
                     //okay type and enough seats
                     if (Hij >= 1) {
+                        System.out.println(r.getBuilding()+r.getRoomNum()+" fits "+s.getSectionID());
 
                         // 1 credit and MWF professor schedule
                         if (c.getCredits() == 1 && professorScheduleType.equals("MWF")) {
@@ -114,6 +117,7 @@ public class CourseSchedulingMain {
                                     if (isHourAvailableForProfessor && isHourAvailableForRoom) {
                                         double sectionSum = Hij * roomEfficiency;
                                         if (sectionSum > bestSectionSum) {
+                                            System.out.println("Both professor and room available at: "+i+": "+j+" sum is: "+sectionSum);
                                             bestSectionSum = sectionSum;
                                             bestMWF = LinearProgramming.clearAllTimeSlots(bestMWF);
                                             bestMWF = LinearProgramming.assignTimeSlots(bestMWF, j, c.getCredits(), d.getDay());
@@ -143,8 +147,11 @@ public class CourseSchedulingMain {
 
                                     //professor is available for one hour + 15 minutes before and after
                                     if (isHourAvailableForProfessor && isHourAvailableForRoom) {
+
                                         double sectionSum = Hij * roomEfficiency;
                                         if (sectionSum > bestSectionSum) {
+                                            System.out.println("Both professor and room available at: "+i+": "+j+" sum is: "+sectionSum);
+                                            System.out.println();
                                             bestSectionSum = sectionSum;
                                             bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
                                             bestTR = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), d.getDay());
@@ -177,6 +184,7 @@ public class CourseSchedulingMain {
                                 if (isHourAvailableForProfessor && isHourAvailableForRoom) {
                                     double sectionSum = Hij * roomEfficiency;
                                     if (sectionSum > bestSectionSum) {
+                                        System.out.println("Both professor and room available at: "+j+" sum is: "+sectionSum);
                                         bestSectionSum = sectionSum;
                                         bestMWF = LinearProgramming.clearAllTimeSlots(bestMWF);
                                         bestMWF = LinearProgramming.assignTimeSlots(bestMWF, j, c.getCredits(), professorDays.get(0).getDay());
@@ -209,6 +217,7 @@ public class CourseSchedulingMain {
                                 if (isHourAvailableForProfessor && isHourAvailableForRoom) {
                                     double sectionSum = Hij * roomEfficiency;
                                     if (sectionSum > bestSectionSum) {
+                                        System.out.println("Both professor and room available at: "+j+" sum is: "+sectionSum);
                                         bestSectionSum = sectionSum;
                                         bestTR = LinearProgramming.clearAllTimeSlots(bestTR);
                                         bestMWF = LinearProgramming.assignTimeSlots(bestTR, j, c.getCredits(), professorDays.get(0).getDay());
@@ -245,30 +254,25 @@ public class CourseSchedulingMain {
                         }
                     }
 
-                    try {
-                        //    ASSIGN section the best room and ASSIGN day time slots when being taught
-                        System.out.println("Assigning course: " + s.getSectionID() + " size: " + c.getCourseSize() + " to: "
-                                + bestRoom.getBuilding() + bestRoom.getRoomNum() + " with seating: " + bestRoom.getSeatingCapacity());
-                       // System.out.println("At time: \n" + bestTimes);
-                       // System.out.println("At " + bestRoom.getBuilding() + bestRoom.getRoomNum() + " time: \n" + bestRoom.getDayList());
-                        System.out.println("with professor: " + p.getProfessorName());
-                        //System.out.println(p.getAvailableDayTimes());
-                        System.out.println();
-                        System.out.println();
+                    //    ASSIGN section the best room and ASSIGN day time slots when being taught
+                    System.out.println("Assigning course: " + s.getSectionID() + " size: " + c.getCourseSize() + " to: "
+                            + bestRoom.getBuilding() + bestRoom.getRoomNum() + " with seating: " + bestRoom.getSeatingCapacity());
+                   // System.out.println("At time: \n" + bestTimes);
+                   // System.out.println("At " + bestRoom.getBuilding() + bestRoom.getRoomNum() + " time: \n" + bestRoom.getDayList());
+                    System.out.println("with professor: " + p.getProfessorName());
+                    //System.out.println(p.getAvailableDayTimes());
+                    System.out.println();
+                    System.out.println();
 
-                        s.setRoomAssigned(bestRoom);
-                        s.setDayTimeAssigned(bestTimes);
-                        //    ASSIGN professors' time slots with current section slots, add section to teaching list
-                        p.setAvailableDayTimes(bestTimes);
-                        p.addDayTimes(bestTimes);
-                        p.getSectionsTaught().add(s);
-                        //assign best times to the best room fit
+                    s.setRoomAssigned(bestRoom);
+                    s.setDayTimeAssigned(bestTimes);
+                    //    ASSIGN professors' time slots with current section slots, add section to teaching list
+                    p.setAvailableDayTimes(bestTimes);
+                    p.addDayTimes(bestTimes);
+                    p.getSectionsTaught().add(s);
+                    //assign best times to the best room fit
 
-                        bestRoom.addDayTimes(bestTimes);
-                    } catch (NullPointerException np) {
-                        np.printStackTrace();
-                    }
-
+                    bestRoom.addDayTimes(bestTimes);
 
                 }
                 totalSectionsSum += bestSectionSum;
@@ -279,18 +283,18 @@ public class CourseSchedulingMain {
 
         ObjectiveSum += totalCourseSum;
 
-        for (Course c : courseList) {
-            try {
-                for (int i = 0; i < c.getCourseSections().size(); i++)
-                if (c.getCourseSections().get(i).getRoomAssigned().getRoomNum() != "") {
-                    filledCourses.add(c);
-                }
-            } catch (NullPointerException e) {
-                missedCourses.add(c);
-            }
-        }
+//        for (Course c : courseList) {
+//            try {
+//                for (int i = 0; i < c.getCourseSections().size(); i++)
+//                if (c.getCourseSections().get(i).getRoomAssigned().getRoomNum() != "") {
+//                    filledCourses.add(c);
+//                }
+//            } catch (NullPointerException e) {
+//                missedCourses.add(c);
+//            }
+//        }
 
-        outputPCR();
+        //outputPCR();
     }//end main
 
 
@@ -429,8 +433,8 @@ public class CourseSchedulingMain {
         List<Section> sectionList114 = new ArrayList<Section>();
         sectionList114.add(new Section(sectionIds[0], courseName[13]+String.valueOf(sectionIds[0]), professorList.get(4)));
         sectionList114.add(new Section(sectionIds[1], courseName[13]+String.valueOf(sectionIds[1]), professorList.get(5)));
-        //sectionList114.add(new Section(sectionIds[2], courseName[13]+String.valueOf(sectionIds[2]), professorList.get(6)));
-        //sectionList114.add(new Section(sectionIds[3], courseName[13]+String.valueOf(sectionIds[3]), professorList.get(7)));
+        sectionList114.add(new Section(sectionIds[2], courseName[13]+String.valueOf(sectionIds[2]), professorList.get(6)));
+        sectionList114.add(new Section(sectionIds[3], courseName[13]+String.valueOf(sectionIds[3]), professorList.get(7)));
         courseList.add(new Course(courseName[13], 30, 3, courseTypes[3], sectionList114));//course name, peopel, credits, type,sections
 
 
@@ -440,9 +444,9 @@ public class CourseSchedulingMain {
     private static List<Room> getRoomList() {
         List<Room> roomList = new ArrayList<Room>();
 
-        Room a = new Room("100J", "EGR", 55, "standard");
-        Room b = new Room("215E", "EGR", 33, "standard");
-        Room c = new Room("215A", "EGR", 40, "standard");
+        Room a = new Room("215E", "EGR", 33, "standard");
+        Room b = new Room("215A", "EGR", 40, "standard");
+        Room c = new Room("100J", "EGR", 55, "standard");
         Room test = new Room("TTT", "EGR", 100, "standard");
 
         //testing room
