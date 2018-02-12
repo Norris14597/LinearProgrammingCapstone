@@ -24,6 +24,8 @@ import java.util.List;
 
 public class LinearProgramming {
 
+    private static int DAY_SIZE = 51;
+
     public static double happinessRoomVal(Room r, Course c) {
         //section fits roomsize and is proper room type
         if (r.getSeatingCapacity() >= c.getCourseSize() && r.getRoomType() == c.getCourseType()
@@ -70,14 +72,14 @@ public class LinearProgramming {
                     && !days.get(index).getDayTimes().get(timeIndex + 3).isTimeFilled()
                     && !days.get(index).getDayTimes().get(timeIndex + 4).isTimeFilled());
         }
-        else if (timeIndex + 3 == 51) { //end day check: 15before + !15after
+        else if (timeIndex + 3 == DAY_SIZE) { //end day check: 15before + !15after
             return (!days.get(index).getDayTimes().get(timeIndex - 1).isTimeFilled()
                     && !days.get(index).getDayTimes().get(timeIndex).isTimeFilled()
                     && !days.get(index).getDayTimes().get(timeIndex + 1).isTimeFilled()
                     && !days.get(index).getDayTimes().get(timeIndex + 2).isTimeFilled()
                     && !days.get(index).getDayTimes().get(timeIndex + 3).isTimeFilled());
         }
-        else if (timeIndex == 49 || timeIndex == 50 || timeIndex == 51) { //not enough time for section
+        else if (timeIndex == DAY_SIZE - 2 || timeIndex == DAY_SIZE - 1 || timeIndex == DAY_SIZE) { //not enough time for section
             return false;
         }
         else { //all other cases
@@ -108,7 +110,7 @@ public class LinearProgramming {
                     && !days.get(4).getDayTimes().get(timeIndex + 3).isTimeFilled()
                     && !days.get(4).getDayTimes().get(timeIndex + 4).isTimeFilled());
         }
-        else if (timeIndex + 3 == 51) { //end day check: 15before + !15after
+        else if (timeIndex + 3 == DAY_SIZE) { //end day check: 15before + !15after
             return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
@@ -125,7 +127,7 @@ public class LinearProgramming {
                     && !days.get(4).getDayTimes().get(timeIndex + 2).isTimeFilled()
                     && !days.get(4).getDayTimes().get(timeIndex + 3).isTimeFilled());
         }
-        else if (timeIndex == 49 || timeIndex == 50 || timeIndex == 51) { //not enough time for section
+        else if (timeIndex == DAY_SIZE - 2 || timeIndex == DAY_SIZE - 1 || timeIndex == DAY_SIZE) { //not enough time for section
             return false;
         }
         else { //all other cases
@@ -167,7 +169,7 @@ public class LinearProgramming {
                     && !days.get(3).getDayTimes().get(timeIndex + 5).isTimeFilled()
                     && !days.get(3).getDayTimes().get(timeIndex + 6).isTimeFilled());
         }
-        else if (timeIndex + 5 == 51) { //end day check: 15before + !15after
+        else if (timeIndex + 5 == DAY_SIZE) { //end day check: 15before + !15after
             return (!days.get(1).getDayTimes().get(timeIndex - 1).isTimeFilled()
                     && !days.get(1).getDayTimes().get(timeIndex).isTimeFilled()
                     && !days.get(1).getDayTimes().get(timeIndex + 1).isTimeFilled()
@@ -183,7 +185,7 @@ public class LinearProgramming {
                     && !days.get(3).getDayTimes().get(timeIndex + 4).isTimeFilled()
                     && !days.get(3).getDayTimes().get(timeIndex + 5).isTimeFilled());
         }
-        else if (timeIndex == 47 || timeIndex == 48 || timeIndex == 49 || timeIndex == 50 || timeIndex == 51) { //not enough time for section
+        else if (timeIndex == DAY_SIZE - 4 || timeIndex == DAY_SIZE - 3 || timeIndex == DAY_SIZE - 2 || timeIndex == DAY_SIZE - 1 || timeIndex == DAY_SIZE) { //not enough time for section
             return false;
         }
         else { //all other cases
@@ -214,14 +216,14 @@ public class LinearProgramming {
                     && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex + 4).isTimeFilled());
         }
-        else if (timeIndex + 3 == 51) { //end day check: 15before + !15after
+        else if (timeIndex + 3 == DAY_SIZE) { //end day check: 15before + !15after
             return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex + 2).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex + 3).isTimeFilled());
         }
-        else if (timeIndex == 49 || timeIndex == 50 || timeIndex == 51) { //not enough time for section
+        else if (timeIndex == DAY_SIZE - 2 || timeIndex == DAY_SIZE - 1 || timeIndex == DAY_SIZE) { //not enough time for section
             return false;
         }
         else { //all other cases
@@ -253,7 +255,7 @@ public class LinearProgramming {
                     && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled()
                     && !days.get(2).getDayTimes().get(timeIndex + 4).isTimeFilled());
         }
-        else if (timeIndex + 3 == 51) { //end day check: 15before + !15after
+        else if (timeIndex + 3 == DAY_SIZE) { //end day check: 15before + !15after
             return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
@@ -270,7 +272,7 @@ public class LinearProgramming {
                     && !days.get(2).getDayTimes().get(timeIndex + 2).isTimeFilled()
                     && !days.get(2).getDayTimes().get(timeIndex + 3).isTimeFilled());
         }
-        else if (timeIndex == 49 || timeIndex == 50 || timeIndex == 51) { //not enough time for section
+        else if (timeIndex == DAY_SIZE - 2 || timeIndex == DAY_SIZE - 1 || timeIndex == DAY_SIZE) { //not enough time for section
             return false;
         }
         else { //all other cases
@@ -313,7 +315,7 @@ public class LinearProgramming {
                     && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled()
                     && !days.get(1).getDayTimes().get(timeIndex + 6).isTimeFilled());
         }
-        else if (timeIndex + 5 == 51) { //end day check: 15before + !15after
+        else if (timeIndex + 5 == DAY_SIZE) { //end day check: 15before + !15after
             return (!days.get(0).getDayTimes().get(timeIndex - 1).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex).isTimeFilled()
                     && !days.get(0).getDayTimes().get(timeIndex + 1).isTimeFilled()
@@ -329,7 +331,7 @@ public class LinearProgramming {
                     && !days.get(1).getDayTimes().get(timeIndex + 4).isTimeFilled()
                     && !days.get(1).getDayTimes().get(timeIndex + 5).isTimeFilled());
         }
-        else if (timeIndex == 47 || timeIndex == 48 || timeIndex == 49 || timeIndex == 50 || timeIndex == 51) { //not enough time for section
+        else if (timeIndex == DAY_SIZE - 4 || timeIndex == DAY_SIZE - 3 || timeIndex == DAY_SIZE - 2 || timeIndex == DAY_SIZE - 1 || timeIndex == DAY_SIZE) { //not enough time for section
             return false;
         }
         else { //all other cases
