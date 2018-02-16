@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-//time indexes 44 slots
+//time indexes 51 slots
 //8: 0 - 3
 //9: 4 - 7
 //10: 8 - 11
@@ -19,7 +19,6 @@ import java.util.List;
 //18: 40 - 43
 //19: 44 - 47
 //20: 48 - 51
-//44 time slots
 
 
 public class LinearProgramming {
