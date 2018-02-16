@@ -64,6 +64,8 @@ public class CourseSchedulingMain {
         for (Course c : courseList) {
             double totalSectionsSum = 0.0; //sum of all sections within a course
             boolean isSectionAssigned = false;
+            String[] courseAssignmentFailed = new String[21];
+            int courseFailedIterator = 0;
 
             //each section within a course
             for (Section s : c.getCourseSections()) {
@@ -253,7 +255,6 @@ public class CourseSchedulingMain {
                     System.out.println("with professor: " + p.getProfessorName());
                     //System.out.println(p.getAvailableDayTimes());
                     System.out.println();
-                    System.out.println();
 
                     s.setRoomAssigned(bestRoom);
                     s.setDayTimeAssigned(bestTimes);
@@ -264,25 +265,28 @@ public class CourseSchedulingMain {
                     //assign best times to the best room fit
 
                     bestRoom.addDayTimes(bestTimes);
+                }else {
+                    System.out.println("Section not assigned: " + c.toString());
                 }
                 totalSectionsSum += bestSectionSum;
             } // end sectionlist
+
 
             totalCourseSum += totalSectionsSum;
         }// end course list
 
         ObjectiveSum += totalCourseSum;
 
-        for (Course c : courseList) {
-            try {
-                for (int i = 0; i < c.getCourseSections().size(); i++)
-                if (c.getCourseSections().get(i).getRoomAssigned().getRoomNum() != "") {
-                    filledCourses.add(c);
-                }
-            } catch (NullPointerException e) {
-                missedCourses.add(c);
-            }
-        }
+//        for (Course c : courseList) {
+//            try {
+//                for (int i = 0; i < c.getCourseSections().size(); i++)
+//                if (c.getCourseSections().get(i).getRoomAssigned().getRoomNum() != "") {
+//                    filledCourses.add(c);
+//                }
+//            } catch (NullPointerException e) {
+//                missedCourses.add(c);
+//            }
+//        }
 
         outputPCR();
     }//end main
@@ -303,7 +307,6 @@ public class CourseSchedulingMain {
 
         System.out.println("************* COURSES NOT ASSIGNED *************");
         missedCourses.forEach(System.out::println);
-
     }
 
 
@@ -393,7 +396,7 @@ public class CourseSchedulingMain {
         sectionList110.add(new Section(sectionIds[1], courseName[9]+String.valueOf(sectionIds[1]), professorList.get(5)));
         sectionList110.add(new Section(sectionIds[2], courseName[9]+String.valueOf(sectionIds[2]), professorList.get(6)));
         sectionList110.add(new Section(sectionIds[3], courseName[9]+String.valueOf(sectionIds[3]), professorList.get(7)));
-        courseList.add(new Course(courseName[9], 30, 1, courseTypes[3], sectionList110, "default"));//course name, peopel, credits, type,sections
+        courseList.add(new Course(courseName[9], 30, 3, courseTypes[3], sectionList110, "default"));//course name, peopel, credits, type,sections
 
         //EGR111
         List<Section> sectionList111 = new ArrayList<Section>();
