@@ -5,6 +5,32 @@ package com.norris.course_scheduling;
  */
 public class Algorithm {
 
+    //*********** POSSIBLE WAYS OF IMPROVEMENT *************** //
+//1. the first sections within the course lists will get priority on taking the first time slots. Possible
+//      solution is to loop through the algorithm with every possible ordering of each section in order to
+//      maximize the objective funciton further.
+
+//*********** ENGINEERING SCHEDULING REQUIREMENTS *************** //
+//1. professor can choose either a MWF or TR schedule type
+//2. classes are either 1 or 3 credits
+//3. 3 unit classes are either MWF (1 hour) or TR (1.5 hour) based
+//4. 1 unit classes can be either MTWRF (1 hour)
+//5. classes can start during an 15 minute period of any hour
+//      1 credit: TR ONE HOUR (4 times + 1 on each end) = 6 slots
+//      1 credit: MWF ONE HOUR (4 times + 1 on each end) = 6 slots
+//      3 credits: TR 1.5 HOUR (6 + 1 each end) * 2 = 16 slots
+//      3 credits: MWF 1 HOUR (4 times + 1 each end) * 3 = 18 slots
+
+//********** CONSTRAINTS ***************//
+//1. no faculty assigned to more than one class (section) at a time
+//2. no room holding more than one class (section) at a time
+//3. course type (ex: needs projector) must be assigned to a room that fits that constraint with happiness of 1.5
+//4. at least 15 minutes between faculties end of class to next assigned class
+//5. at least 15 minutes between any end of one class to the start of another class in any room
+//6. section size must be less than or equal to room size assigned (efficiency weighting)
+
+
+
     /*
 ****************************** LINEAR PROGRAMMING ALGORITHM ***************************************
 

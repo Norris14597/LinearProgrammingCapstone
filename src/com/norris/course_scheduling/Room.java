@@ -28,7 +28,17 @@ public class Room {
     }
 
     public Room() {
+        this.roomNum = "000";
+        this.building = "BLDG";
+        this.seatingCapacity = 50;
+        this.roomType = "standard";
 
+        dayList = new ArrayList<DayTimes>();
+        dayList.add(new DayTimes("Monday"));
+        dayList.add(new DayTimes("Tuesday"));
+        dayList.add(new DayTimes("Wednesday"));
+        dayList.add(new DayTimes("Thursday"));
+        dayList.add(new DayTimes("Friday"));
     }
 
     public String getRoomNum() {
